@@ -58,8 +58,25 @@ export class ArtistsController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
-    return this.artistsService.remove(id);
+    try {
+      if (checkThatThisIsUUID4(id)) {
+        const artist = this.artistsService.getById(id);
+        if (!artist) {
+          throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+        } else {
+          return this.artistsService.remove(id);
+        }
+      } else {
+        throw new HttpException(
+          'It is not a uuid version 4',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    } catch (err) {
+      throw new HttpException(err.message, err.status);
+    }
   }
 
   @Put(':id')
