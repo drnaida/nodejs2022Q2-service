@@ -5,10 +5,11 @@ import { ArtistsController } from './modules/artists/artists.controller';
 import { ArtistsService } from './modules/artists/artists.service';
 import { ArtistsModule } from './modules/artists/artists.module';
 import { DataBaseModule } from './utils/in-memory-database.module';
-import {TracksModule} from "./modules/tracks/tracks.module";
+import { TracksModule } from './modules/tracks/tracks.module';
+import { AlbumsModule } from './modules/albums/albums.module';
 
 @Module({
-  imports: [ArtistsModule, TracksModule, DataBaseModule],
+  imports: [ArtistsModule, TracksModule, AlbumsModule, DataBaseModule],
   controllers: [AppController],
   providers: [AppService],
 })
