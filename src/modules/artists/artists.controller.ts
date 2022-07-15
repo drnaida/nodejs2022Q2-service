@@ -34,11 +34,11 @@ export class ArtistsController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return 'Remove ' + id;
+    return this.artistsService.remove(id);
   }
 
   @Put(':id')
-  update(@Body() updateProductDto: UpdateArtistDto, @Param('id') id: string) {
-    return 'Update' + id;
+  update(@Body() updateProduct: UpdateArtistDto, @Param('id') id: string) {
+    return this.artistsService.update(id, updateProduct);
   }
 }

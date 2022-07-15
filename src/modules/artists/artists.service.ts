@@ -18,4 +18,13 @@ export class ArtistsService {
       id: Date.now().toString(),
     });
   }
+
+  update(id: string, product) {
+    const index = this.artists.findIndex((p) => p.id === id);
+    return (this.artists[index] = { id, ...product });
+  }
+
+  remove(id: string) {
+    return (this.artists = this.artists.filter((p) => p.id != id));
+  }
 }
