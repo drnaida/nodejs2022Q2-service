@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class InMemoryDatabaseService {
   private database = {
@@ -20,7 +21,7 @@ export class InMemoryDatabaseService {
   create(artistDto, key) {
     return this.database[key].push({
       ...artistDto,
-      id: Date.now().toString(),
+      id: uuidv4(),
     });
   }
 

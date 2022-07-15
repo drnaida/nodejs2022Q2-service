@@ -8,10 +8,12 @@ import {
   Put,
   HttpCode,
   HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-product.dto';
 import { ArtistsService } from './artists.service';
+import { checkThatThisIsUUID4 } from '../../utils/checkUUID';
 
 @Controller('artists')
 export class ArtistsController {
@@ -23,7 +25,26 @@ export class ArtistsController {
 
   @Get(':id')
   getOne(@Param('id') id: string) {
-    return this.artistsService.getById(id);
+    try {
+      if (checkThatThisIsUUID4(id)) {
+        const artist = this.artistsService.getById(id);
+        if (!artist) {
+          throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+        } else {
+          return artist;
+        }
+      } else {
+        throw new HttpException(
+          'It is not a uuid version 4',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    } catch (err) {
+      throw new HttpException(
+        err.message,
+        err.status,
+      );
+    }
   }
 
   @Post()
