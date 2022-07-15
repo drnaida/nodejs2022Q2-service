@@ -25,11 +25,11 @@ export class InMemoryDatabaseService {
     });
     return this.database[key][this.database[key].length - 1];
   }
-
   update(id: string, product, key) {
     const index = this.database[key].findIndex((p) => p.id === id);
-    const original = this.database[key][index];
-    return (this.database[key][index] = { id, ...original, ...product });
+    const the_product = this.database[key][index];
+    Object.assign(the_product, product);
+    return the_product;
   }
 
   remove(id: string, key) {

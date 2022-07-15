@@ -15,7 +15,7 @@ import { UpdateArtistDto } from './dto/update-product.dto';
 import { ArtistsService } from './artists.service';
 import { checkThatThisIsUUID4 } from '../../utils/checkUUID';
 
-@Controller('artists')
+@Controller('artist')
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
   @Get()
@@ -80,7 +80,7 @@ export class ArtistsController {
   }
 
   @Put(':id')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   update(@Body() updateProduct: UpdateArtistDto, @Param('id') id: string) {
     try {
       if (checkThatThisIsUUID4(id)) {
