@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class InMemoryDatabaseService {
   private database = {
-    users: ['users'],
-    artists: ['artists'],
-    tracks: ['tracks'],
-    albums: ['albums'],
-    favorites: ['favorites'],
+    users: [],
+    artists: [],
+    tracks: [],
+    albums: [],
+    favorites: [],
   };
 
   getAll(key) {

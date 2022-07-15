@@ -1,55 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
+import { InMemoryDatabaseService } from '../../utils/in-memory-database.service';
 @Injectable()
 export class ArtistsService {
-  private artists = [];
+  constructor(private readonly databaseService: InMemoryDatabaseService) {}
 
   getAll() {
-    return this.artists;
+    return this.databaseService.getAll('artists');
   }
 
   getById(id: string) {
-    return this.artists.find((p) => p.id === id);
+    return this.databaseService.getById(id, 'artists');
   }
 
   create(artistDto: CreateArtistDto) {
-    return this.artists.push({
-      ...artistDto,
-      id: Date.now().toString(),
-    });
+    return this.databaseService.create(artistDto, 'artists');
   }
 
   update(id: string, product) {
-    const index = this.artists.findIndex((p) => p.id === id);
-    return (this.artists[index] = { id, ...product });
+    return this.databaseService.update(id, product, 'artists');
   }
 
   remove(id: string) {
-    return (this.artists = this.artists.filter((p) => p.id != id));
+    return this.databaseService.remove(id, 'artists');
   }
-}
-
-try {
-  if (checkThatThisIsUUID4(id)) {
-    const product = await database.getById(id);
-    if (!product) {
-      res.writeHead(404, {'Content-Type': 'application/json'});
-      res.write(JSON.stringify({message: 'User not found'}));
-      res.end();
-    } else {
-      res.writeHead(200, {'Content-Type': 'application/json'});
-      res.write(JSON.stringify(product));
-      res.end();
-    }
-  } else {
-    res.writeHead(400, {'Content-Type': 'application/json'});
-    res.write(JSON.stringify({message: 'Not an uuid'}));
-    res.end();
-  }
-
-} catch (error) {
-  res.writeHead(500, {'Content-Type': 'application/json'});
-  res.write(JSON.stringify({message: 'Errors on the server side that occur during the processing of a request'}));
-  res.end();
-}
 }
