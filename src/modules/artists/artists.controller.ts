@@ -6,25 +6,30 @@ import {
   Param,
   Post,
   Put,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-product.dto';
+import { ArtistsService } from './artists.service';
 
 @Controller('artists')
 export class ArtistsController {
+  constructor(private readonly artistsService: ArtistsService) {}
   @Get()
-  getAll(): string {
-    return 'getAll';
+  getAll() {
+    return this.artistsService.getAll();
   }
 
   @Get(':id')
   getOne(@Param('id') id: string) {
-    return 'GetOne' + id;
+    return this.artistsService.getById(id);
   }
 
   @Post()
-  create(@Body() createArtist: CreateArtistDto): string {
-    return `Name: ${createArtist.name}`;
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() createArtist: CreateArtistDto) {
+    return this.artistsService.create(createArtist);
   }
 
   @Delete(':id')
