@@ -40,17 +40,21 @@ export class ArtistsController {
         );
       }
     } catch (err) {
-      throw new HttpException(
-        err.message,
-        err.status,
-      );
+      throw new HttpException(err.message, err.status);
     }
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createArtist: CreateArtistDto) {
-    return this.artistsService.create(createArtist);
+    try {
+      return this.artistsService.create(createArtist);
+    } catch (err) {
+      throw new HttpException(
+        'Required filled must NOT be empty',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Delete(':id')

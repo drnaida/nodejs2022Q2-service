@@ -1,4 +1,8 @@
+import { IsNotEmpty } from 'class-validator';
+
 export class CreateArtistDto {
-  readonly name: string;
-  readonly grammy: boolean;
+  @IsNotEmpty()
+  name: string;
+  @IsNotEmpty()
+  grammy: boolean;
 }

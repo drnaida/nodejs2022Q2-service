@@ -19,10 +19,11 @@ export class InMemoryDatabaseService {
   }
 
   create(artistDto, key) {
-    return this.database[key].push({
+    this.database[key].push({
       ...artistDto,
       id: uuidv4(),
     });
+    return this.database[key][this.database[key].length - 1];
   }
 
   update(id: string, product, key) {
