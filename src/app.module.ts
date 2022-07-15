@@ -7,9 +7,16 @@ import { ArtistsModule } from './modules/artists/artists.module';
 import { DataBaseModule } from './utils/in-memory-database.module';
 import { TracksModule } from './modules/tracks/tracks.module';
 import { AlbumsModule } from './modules/albums/albums.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
-  imports: [ArtistsModule, TracksModule, AlbumsModule, DataBaseModule],
+  imports: [
+    ArtistsModule,
+    TracksModule,
+    UsersModule,
+    AlbumsModule,
+    DataBaseModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
