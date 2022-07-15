@@ -80,7 +80,24 @@ export class ArtistsController {
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.CREATED)
   update(@Body() updateProduct: UpdateArtistDto, @Param('id') id: string) {
-    return this.artistsService.update(id, updateProduct);
+    try {
+      if (checkThatThisIsUUID4(id)) {
+        const artist = this.artistsService.getById(id);
+        if (!artist) {
+          throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+        } else {
+          return this.artistsService.update(id, updateProduct);
+        }
+      } else {
+        throw new HttpException(
+          'It is not a uuid version 4',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    } catch (err) {
+      throw new HttpException(err.message, err.status);
+    }
   }
 }

@@ -28,7 +28,8 @@ export class InMemoryDatabaseService {
 
   update(id: string, product, key) {
     const index = this.database[key].findIndex((p) => p.id === id);
-    return (this.database[key][index] = { id, ...product });
+    const original = this.database[key][index];
+    return (this.database[key][index] = { id, ...original, ...product });
   }
 
   remove(id: string, key) {
