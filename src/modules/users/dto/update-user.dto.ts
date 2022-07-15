@@ -3,8 +3,8 @@ import {IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString} from 'class-validato
 export class UpdatePasswordDto {
   @IsNotEmpty()
   @IsString()
-  oldPassowrd: string;
+  oldPassword: string;
   @IsNotEmpty()
   @IsString()
-  newPassowrd: string;
+  newPassword: string;
 }

@@ -11,7 +11,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { checkThatThisIsUUID4 } from '../../utils/checkUUID';
 
@@ -81,7 +81,7 @@ export class UsersController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(@Body() updateProduct: UpdateUserDto, @Param('id') id: string) {
+  update(@Body() updateProduct: UpdatePasswordDto, @Param('id') id: string) {
     try {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.usersService.getById(id);

@@ -16,6 +16,7 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     AlbumsModule,
     DataBaseModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
