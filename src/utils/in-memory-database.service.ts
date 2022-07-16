@@ -7,7 +7,11 @@ export class InMemoryDatabaseService {
     artists: [],
     tracks: [],
     albums: [],
-    favorites: [],
+    favorites: {
+      artists: [],
+      tracks: [],
+      albums: [],
+    },
   };
 
   getAll(key) {
