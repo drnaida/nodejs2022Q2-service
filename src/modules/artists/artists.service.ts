@@ -30,7 +30,7 @@ export class ArtistsService {
     const deleted = this.databaseService.remove(id, 'artists');
     const artist = this.favoritesService.getById(id, 'artists');
     if (artist) {
-      this.favoritesService.removeFavorite(id, 'artists');
+      const something = this.favoritesService.removeFavorite(id, 'artists');
     }
     return deleted;
   }

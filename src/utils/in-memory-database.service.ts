@@ -4,18 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class InMemoryDatabaseService {
   private database = {
     users: [],
-    artists: [
-      {
-        id: '1231231312312',
-        name: 'Christian',
-        grammy: true,
-      },
-      {
-        id: '123123',
-        name: 'Christian',
-        grammy: false,
-      },
-    ],
+    artists: [],
     tracks: [],
     albums: [],
     favorites: {
@@ -80,8 +69,6 @@ export class InMemoryDatabaseService {
   }
   removeFavorite(id: string, subkey) {
     console.log('delete', this.database['favorites'][subkey]);
-    return (this.database['favorites'][subkey] = this.database['favorites'][
-      subkey
-    ].filter((p) => p.id != id));
+    this.database.favorites[subkey].splice(id, 1);
   }
 }

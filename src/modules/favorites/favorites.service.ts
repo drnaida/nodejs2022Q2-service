@@ -9,7 +9,7 @@ export class FavoritesService {
     const favorites = this.databaseService.getAll('favorites');
     console.log('sdfs', favorites);
     for (const element in favorites) {
-      if (element.length >= 0) {
+      if (element.length > 0) {
         if (element == 'artists') {
           const result = favorites['artists'].map((item) =>
             this.databaseService.getById(item.id, 'artists'),
