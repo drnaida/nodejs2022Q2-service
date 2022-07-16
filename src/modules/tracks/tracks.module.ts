@@ -7,5 +7,6 @@ import { DataBaseModule } from '../../utils/in-memory-database.module';
   providers: [TracksService],
   controllers: [TracksController],
   imports: [DataBaseModule],
+  exports: [TracksService]
 })
 export class TracksModule {}

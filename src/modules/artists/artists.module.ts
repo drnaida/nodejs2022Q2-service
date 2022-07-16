@@ -7,5 +7,6 @@ import { DataBaseModule } from '../../utils/in-memory-database.module';
   providers: [ArtistsService],
   controllers: [ArtistsController],
   imports: [DataBaseModule],
+  exports: [ArtistsService]
 })
 export class ArtistsModule {}
