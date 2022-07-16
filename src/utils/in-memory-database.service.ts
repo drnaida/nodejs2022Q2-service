@@ -69,6 +69,16 @@ export class InMemoryDatabaseService {
   }
   removeFavorite(id: string, subkey) {
     console.log('delete', this.database['favorites'][subkey]);
-    this.database.favorites[subkey].splice(id, 1);
+    const entityIdx = this.database.favorites[subkey].findIndex(
+        (id: string) => id === id,
+    );
+
+    if (entityIdx === -1) {
+      return false;
+    }
+
+    this.database.favorites[subkey].splice(entityIdx, 1);
+
+    return true;
   }
 }

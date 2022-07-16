@@ -175,6 +175,7 @@ describe('Favorites (e2e)', () => {
         .set(commonHeaders);
 
       expect(responseAfterDeletion.status).toBe(StatusCodes.OK);
+      expect(responseAfterDeletion).toBe('sdfsd');
       const artistSearchRes = responseAfterDeletion.body.artists.find(
         (artist) => artist.id === artistId,
       );

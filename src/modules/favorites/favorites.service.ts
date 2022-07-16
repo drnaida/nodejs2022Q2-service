@@ -7,27 +7,44 @@ export class FavoritesService {
 
   getAll() {
     const favorites = this.databaseService.getAll('favorites');
-    console.log('sdfs', favorites);
     for (const element in favorites) {
-      if (element.length > 0) {
+      if (favorites[element].length > 0) {
         if (element == 'artists') {
-          const result = favorites['artists'].map((item) =>
-            this.databaseService.getById(item.id, 'artists'),
+          const result = favorites['artists'].map((item) => {
+                if (item != null) {
+                  return this.databaseService.getById(item.id, 'artists')
+                }
+          }
+
           );
-          favorites.artists = result;
+
+          const result1 = result.filter(item => item !== null);
+          favorites.artists = result1;
         } else if (element == 'albums') {
-          const result = favorites['albums'].map((item) =>
-            this.databaseService.getById(item.id, 'albums'),
+          const result = favorites['albums'].map((item) => {
+                if (item != null) {
+                  return this.databaseService.getById(item.id, 'albums')
+                }
+          }
+
           );
-          favorites.albums = result;
+          const result1 = result.filter(item => item !== null);
+          favorites.albums = result1;
         } else if (element == 'tracks') {
-          const result = favorites['tracks'].map((item) =>
-            this.databaseService.getById(item.id, 'tracks'),
+          const result = favorites['tracks'].map((item) => {
+                if (item != null) {
+                  return this.databaseService.getById(item.id, 'tracks')
+                }
+          }
+
+
           );
-          favorites.tracks = result;
+          const result1 = result.filter(item => item !== null);
+          favorites.tracks = result1;
         }
       }
     }
+    console.log('sdfs', favorites);
     return favorites;
   }
 
