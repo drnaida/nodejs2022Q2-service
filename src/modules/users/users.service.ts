@@ -30,7 +30,10 @@ export class UsersService {
   }
 
   update(id: string, product: UpdatePasswordDto) {
-    const user = this.databaseService.update(id, product, 'users');
+    const user = this.databaseService.updatePassword(id, product, 'users');
+    user.version += 1;
+    const time = new Date().getTime();
+    user.updatedAt = +time;
     const { password, ...rest } = user;
     return rest;
   }

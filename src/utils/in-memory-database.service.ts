@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class InMemoryDatabaseService {
@@ -30,6 +30,20 @@ export class InMemoryDatabaseService {
     const the_product = this.database[key][index];
     Object.assign(the_product, product);
     return the_product;
+  }
+
+  updatePassword(id: string, product, key) {
+    const index = this.database[key].findIndex((p) => p.id === id);
+    const the_product = this.database[key][index];
+    if (the_product.password == product.oldPassword) {
+      the_product.password = product.newPassword;
+      return the_product;
+    } else {
+      throw new HttpException(
+        'Wrong previous/old password',
+        HttpStatus.FORBIDDEN,
+      );
+    }
   }
 
   remove(id: string, key) {
