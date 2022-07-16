@@ -39,7 +39,7 @@ export class FavoritesController {
         if (!artist) {
           throw new HttpException(
               'Artist not found, so it cannot be added to favorites',
-              HttpStatus.NOT_FOUND,
+              HttpStatus.UNPROCESSABLE_ENTITY,
           );
         } else {
           return this.favoritesService.createFavorite(id, 'tracks');
@@ -62,7 +62,7 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.favoritesService.getById(id, 'tracks');
         if (!artist) {
-          throw new HttpException('Favorite not found', HttpStatus.NOT_FOUND);
+          throw new HttpException('Favorite not found', HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
           return this.favoritesService.removeFavorite(id, 'tracks');
         }
@@ -86,7 +86,7 @@ export class FavoritesController {
         if (!artist) {
           throw new HttpException(
               'Artist not found, so it cannot be added to favorites',
-              HttpStatus.NOT_FOUND,
+              HttpStatus.UNPROCESSABLE_ENTITY,
           );
         } else {
           return this.favoritesService.createFavorite(id, 'albums');
@@ -109,7 +109,7 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.favoritesService.getById(id, 'albums');
         if (!artist) {
-          throw new HttpException('Favorite not found', HttpStatus.NOT_FOUND);
+          throw new HttpException('Favorite not found', HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
           return this.favoritesService.removeFavorite(id, 'albums');
         }
@@ -133,7 +133,7 @@ export class FavoritesController {
         if (!artist) {
           throw new HttpException(
             'Artist not found, so it cannot be added to favorites',
-            HttpStatus.NOT_FOUND,
+            HttpStatus.UNPROCESSABLE_ENTITY,
           );
         } else {
           return this.favoritesService.createFavorite(id, 'artists');
@@ -156,7 +156,7 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.favoritesService.getById(id, 'artists');
         if (!artist) {
-          throw new HttpException('Favorite not found', HttpStatus.NOT_FOUND);
+          throw new HttpException('Favorite not found', HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
           return this.favoritesService.removeFavorite(id, 'artists');
         }
