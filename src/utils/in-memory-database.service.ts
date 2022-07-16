@@ -31,17 +31,14 @@ export class InMemoryDatabaseService {
   }
 
   createFavorite(id, subkey) {
-    console.log('create', id);
+    console.log('create', this.database['favorites'][subkey]);
     this.database['favorites'][subkey].push({
       id: id,
     });
-    console.log('create1', this.database['favorites'][subkey][
-    this.database['favorites'][subkey].length - 1
-        ]);
+    console.log('create1', this.database['favorites'][subkey]);
     return this.database['favorites'][subkey][
       this.database['favorites'][subkey].length - 1
     ];
-
   }
   update(id: string, product, key) {
     const index = this.database[key].findIndex((p) => p.id === id);
@@ -72,6 +69,8 @@ export class InMemoryDatabaseService {
     const entityIdx = this.database.favorites[subkey].findIndex(
         (id: string) => id === id,
     );
+
+    console.log('entity', entityIdx);
 
     if (entityIdx === -1) {
       return false;

@@ -8,7 +8,6 @@ export class FavoritesService {
   getAll() {
     const favorites = this.databaseService.getAll('favorites');
     for (const element in favorites) {
-      if (favorites[element].length > 0) {
         if (element == 'artists') {
           const result = favorites['artists'].map((item) => {
                 if (item != null) {
@@ -43,7 +42,6 @@ export class FavoritesService {
           favorites.tracks = result1;
         }
       }
-    }
     console.log('sdfs', favorites);
     return favorites;
   }
