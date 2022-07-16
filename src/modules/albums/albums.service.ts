@@ -1,10 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { InMemoryDatabaseService } from '../../utils/in-memory-database.service';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import {FavoritesService} from "../favorites/favorites.service";
 @Injectable()
 export class AlbumsService {
-  constructor(private readonly databaseService: InMemoryDatabaseService) {}
+  constructor(
+      private readonly databaseService: InMemoryDatabaseService,
+      private readonly favoritesService: FavoritesService
+  ) {}
 
   getAll() {
     return this.databaseService.getAll('albums');
@@ -23,6 +27,11 @@ export class AlbumsService {
   }
 
   remove(id: string) {
-    return this.databaseService.remove(id, 'albums');
+    const deleted = this.databaseService.remove(id, 'albums');
+    const artist = this.favoritesService.getById(id, 'albums');
+    if (artist) {
+      this.favoritesService.removeFavorite(id, 'albums');
+    }
+    return deleted;
   }
 }

@@ -2,9 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { InMemoryDatabaseService } from '../../utils/in-memory-database.service';
 import {UpdateTrackDto} from "./dto/update-track.dto";
+import {FavoritesService} from "../favorites/favorites.service";
 @Injectable()
 export class TracksService {
-  constructor(private readonly databaseService: InMemoryDatabaseService) {}
+  constructor(
+      private readonly databaseService: InMemoryDatabaseService,
+      private readonly favoritesService: FavoritesService
+  ) {}
 
   getAll() {
     return this.databaseService.getAll('tracks');
@@ -23,6 +27,11 @@ export class TracksService {
   }
 
   remove(id: string) {
-    return this.databaseService.remove(id, 'tracks');
+    const deleted = this.databaseService.remove(id, 'tracks');
+    const artist = this.favoritesService.getById(id, 'tracks');
+    if (artist) {
+      this.favoritesService.removeFavorite(id, 'tracks');
+    }
+    return deleted;
   }
 }
