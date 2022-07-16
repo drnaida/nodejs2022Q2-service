@@ -11,7 +11,11 @@ export class UsersService {
   }
 
   getById(id: string) {
-    return this.databaseService.getById(id, 'users');
+    const user = this.databaseService.getById(id, 'users');
+    if (user) {
+      const { password, ...rest } = user;
+      return rest;
+    }
   }
 
   create(artistDto: CreateUserDto) {
@@ -21,10 +25,14 @@ export class UsersService {
     user.version = 1;
     user.createdAt = +time;
     user.updatedAt = +time;
+    const { password, ...rest } = user;
+    return rest;
   }
 
   update(id: string, product: UpdatePasswordDto) {
-    return this.databaseService.update(id, product, 'users');
+    const user = this.databaseService.update(id, product, 'users');
+    const { password, ...rest } = user;
+    return rest;
   }
 
   remove(id: string) {
