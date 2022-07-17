@@ -66,9 +66,6 @@ export class InMemoryDatabaseService {
     const entityIdx = this.database.favorites[subkey].findIndex((item) => item.id === the_id);
 
     console.log('entity', entityIdx);
-    if (entityIdx === -1) {
-      return false;
-    }
 
     return this.database.favorites[subkey].splice(entityIdx, 1);
   }
