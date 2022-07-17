@@ -3,12 +3,14 @@ import { AlbumsService } from './albums.service';
 import { AlbumsController } from './albums.controller';
 import { DataBaseModule } from '../../utils/in-memory-database.module';
 import {FavoritesModule} from "../favorites/favorites.module";
+import {TracksModule} from "../tracks/tracks.module";
 
 @Module({
   providers: [AlbumsService],
   controllers: [AlbumsController],
   imports: [DataBaseModule,
     forwardRef(() => FavoritesModule),
+      TracksModule
   ],
   exports: [AlbumsService]
 })
