@@ -31,11 +31,9 @@ export class InMemoryDatabaseService {
   }
 
   createFavorite(id, subkey) {
-    console.log('create', this.database['favorites'][subkey]);
     this.database['favorites'][subkey].push({
       id: id,
     });
-    console.log('create1', this.database['favorites'][subkey]);
     return this.database['favorites'][subkey][
       this.database['favorites'][subkey].length - 1
     ];
@@ -64,20 +62,14 @@ export class InMemoryDatabaseService {
   remove(id: string, key) {
     return (this.database[key] = this.database[key].filter((p) => p.id != id));
   }
-  removeFavorite(id: string, subkey) {
-    console.log('delete', this.database['favorites'][subkey]);
-    const entityIdx = this.database.favorites[subkey].findIndex(
-        (id: string) => id === id,
-    );
+  removeFavorite(the_id: string, subkey) {
+    const entityIdx = this.database.favorites[subkey].findIndex((item) => item.id === the_id);
 
     console.log('entity', entityIdx);
-
     if (entityIdx === -1) {
       return false;
     }
 
-    this.database.favorites[subkey].splice(entityIdx, 1);
-
-    return true;
+    return this.database.favorites[subkey].splice(entityIdx, 1);
   }
 }

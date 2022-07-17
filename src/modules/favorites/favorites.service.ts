@@ -42,7 +42,7 @@ export class FavoritesService {
           favorites.tracks = result1;
         }
       }
-    console.log('sdfs', favorites);
+    console.log('getAll', favorites);
     return favorites;
   }
 
@@ -73,6 +73,8 @@ export class FavoritesService {
     return this.databaseService.remove(id, 'favorites');
   }
   removeFavorite(id: string, subkey) {
-    return this.databaseService.removeFavorite(id, subkey);
+    const result = this.databaseService.removeFavorite(id, subkey);
+    console.log('deleted', result);
+    return result;
   }
 }
