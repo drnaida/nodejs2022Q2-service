@@ -67,8 +67,9 @@ export class InMemoryDatabaseService {
       (item) => item.id === the_id,
     );
 
-    console.log('entity', entityIdx);
-
-    return this.database.favorites[subkey].splice(entityIdx, 1);
+    console.log('id', the_id, 'entity', entityIdx);
+    if (entityIdx !== -1) {
+      return this.database.favorites[subkey].splice(entityIdx, 1)
+    }
   }
 }

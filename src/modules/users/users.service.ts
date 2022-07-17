@@ -20,7 +20,6 @@ export class UsersService {
 
   create(artistDto: CreateUserDto) {
     const user = this.databaseService.create(artistDto, 'users');
-    console.log(user);
     const time = new Date().getTime();
     user.version = 1;
     user.createdAt = +time;
