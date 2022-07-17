@@ -63,7 +63,9 @@ export class InMemoryDatabaseService {
     return (this.database[key] = this.database[key].filter((p) => p.id != id));
   }
   removeFavorite(the_id: string, subkey) {
-    const entityIdx = this.database.favorites[subkey].findIndex((item) => item.id === the_id);
+    const entityIdx = this.database.favorites[subkey].findIndex(
+      (item) => item.id === the_id,
+    );
 
     console.log('entity', entityIdx);
 

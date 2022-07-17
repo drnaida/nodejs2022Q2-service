@@ -1,4 +1,4 @@
-import {IsArray, IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString} from 'class-validator';
+import { IsArray, IsOptional } from 'class-validator';
 
 export class CreateFavoriteDto {
   @IsOptional()

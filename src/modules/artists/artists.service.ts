@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { InMemoryDatabaseService } from '../../utils/in-memory-database.service';
-import {UpdateArtistDto} from "./dto/update-product.dto";
-import {FavoritesService} from "../favorites/favorites.service";
-import {AlbumsService} from "../albums/albums.service";
-import {TracksService} from "../tracks/tracks.service";
+import { UpdateArtistDto } from './dto/update-product.dto';
+import { FavoritesService } from '../favorites/favorites.service';
+import { AlbumsService } from '../albums/albums.service';
+import { TracksService } from '../tracks/tracks.service';
 @Injectable()
 export class ArtistsService {
   constructor(
-      private readonly databaseService: InMemoryDatabaseService,
-      private readonly favoritesService: FavoritesService,
-      private readonly albumsService: AlbumsService,
-      private readonly tracksService: TracksService
+    private readonly databaseService: InMemoryDatabaseService,
+    private readonly favoritesService: FavoritesService,
+    private readonly albumsService: AlbumsService,
+    private readonly tracksService: TracksService,
   ) {}
 
   getAll() {
@@ -32,8 +32,8 @@ export class ArtistsService {
 
   remove(id: string) {
     const deleted = this.databaseService.remove(id, 'artists');
-    const artist = this.favoritesService.getById(id, 'artists');
-    const something = this.favoritesService.removeFavorite(id, 'artists');
+    this.favoritesService.getById(id, 'artists');
+    this.favoritesService.removeFavorite(id, 'artists');
     const allAlbums = this.albumsService.getAll();
     if (allAlbums.length > 0) {
       allAlbums.forEach((album) => {
@@ -41,13 +41,10 @@ export class ArtistsService {
           const new_album = album;
           new_album.artistId = null;
           console.log('new_album', new_album);
-          this.albumsService.update(
-              album.id,
-              new_album
-          );
+          this.albumsService.update(album.id, new_album);
         }
-      })
-      }
+      });
+    }
     const allTracks = this.tracksService.getAll();
     if (allTracks.length > 0) {
       allTracks.forEach((track) => {
@@ -55,12 +52,9 @@ export class ArtistsService {
           const new_album = track;
           new_album.artistId = null;
           console.log('new_album', new_album);
-          this.tracksService.update(
-              track.id,
-              new_album
-          );
+          this.tracksService.update(track.id, new_album);
         }
-      })
+      });
     }
     return deleted;
   }

@@ -1,21 +1,18 @@
 import {
-  Body,
   Controller,
   Delete,
   Get,
   Param,
   Post,
-  Put,
   HttpCode,
   HttpStatus,
   HttpException,
 } from '@nestjs/common';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { FavoritesService } from './favorites.service';
 import { checkThatThisIsUUID4 } from '../../utils/checkUUID';
 import { ArtistsService } from '../artists/artists.service';
-import {AlbumsService} from "../albums/albums.service";
-import {TracksService} from "../tracks/tracks.service";
+import { AlbumsService } from '../albums/albums.service';
+import { TracksService } from '../tracks/tracks.service';
 
 @Controller('favs')
 export class FavoritesController {
@@ -38,16 +35,16 @@ export class FavoritesController {
         const artist = this.tracksService.getById(id);
         if (!artist) {
           throw new HttpException(
-              'Artist not found, so it cannot be added to favorites',
-              HttpStatus.UNPROCESSABLE_ENTITY,
+            'Artist not found, so it cannot be added to favorites',
+            HttpStatus.UNPROCESSABLE_ENTITY,
           );
         } else {
           return this.favoritesService.createFavorite(id, 'tracks');
         }
       } else {
         throw new HttpException(
-            'It is not a uuid version 4',
-            HttpStatus.BAD_REQUEST,
+          'It is not a uuid version 4',
+          HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
@@ -62,14 +59,17 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.favoritesService.getById(id, 'tracks');
         if (!artist) {
-          throw new HttpException('Favorite not found', HttpStatus.UNPROCESSABLE_ENTITY);
+          throw new HttpException(
+            'Favorite not found',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+          );
         } else {
           return this.favoritesService.removeFavorite(id, 'tracks');
         }
       } else {
         throw new HttpException(
-            'It is not a uuid version 4',
-            HttpStatus.BAD_REQUEST,
+          'It is not a uuid version 4',
+          HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
@@ -85,16 +85,16 @@ export class FavoritesController {
         const artist = this.albumsService.getById(id);
         if (!artist) {
           throw new HttpException(
-              'Artist not found, so it cannot be added to favorites',
-              HttpStatus.UNPROCESSABLE_ENTITY,
+            'Artist not found, so it cannot be added to favorites',
+            HttpStatus.UNPROCESSABLE_ENTITY,
           );
         } else {
           return this.favoritesService.createFavorite(id, 'albums');
         }
       } else {
         throw new HttpException(
-            'It is not a uuid version 4',
-            HttpStatus.BAD_REQUEST,
+          'It is not a uuid version 4',
+          HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
@@ -109,14 +109,17 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.favoritesService.getById(id, 'albums');
         if (!artist) {
-          throw new HttpException('Favorite not found', HttpStatus.UNPROCESSABLE_ENTITY);
+          throw new HttpException(
+            'Favorite not found',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+          );
         } else {
           return this.favoritesService.removeFavorite(id, 'albums');
         }
       } else {
         throw new HttpException(
-            'It is not a uuid version 4',
-            HttpStatus.BAD_REQUEST,
+          'It is not a uuid version 4',
+          HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
@@ -156,7 +159,10 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.favoritesService.getById(id, 'artists');
         if (!artist) {
-          throw new HttpException('Favorite not found', HttpStatus.UNPROCESSABLE_ENTITY);
+          throw new HttpException(
+            'Favorite not found',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+          );
         } else {
           return this.favoritesService.removeFavorite(id, 'artists');
         }
