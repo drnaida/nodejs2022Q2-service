@@ -164,7 +164,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         400:
-          description: Bad request. body does not contain required fields
+          description: Required filled must NOT be empty
   /user/{userId}:
     parameters:
       - name: userId
@@ -185,7 +185,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         400:
-          description: Bad request. userId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
           description: User not found
 
@@ -236,9 +236,9 @@ paths:
                     type: integer
                     example: 1655999999
         400:
-          description: Bad request. userId is invalid (not uuid)
+          description: It is not a uuid version 4
         403:
-          description: oldPassowrd is wrong
+          description: Wrong previous/old password
         404:
           description: User not found
 
@@ -251,7 +251,7 @@ paths:
         204:
           description: The user has been deleted
         400:
-          description: Bad request. userId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
           description: User not found
   /track:
@@ -325,9 +325,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Track'
         400:
-          description: Bad request. trackId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Track was not found.
+          description: Track not found
     put:
       tags:
         - Track
@@ -387,9 +387,9 @@ paths:
                     format: uuid
                     nullable: true
         400:
-          description: Bad request. trackId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Track was not found.
+          description: Track not found
     delete:
       tags:
         - Track
@@ -399,9 +399,9 @@ paths:
         204:
           description: Delelted succesfully
         400:
-          description: Bad request. trackId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Track was not found.
+          description: Track not found
   /album:
     get:
       tags:
@@ -449,7 +449,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Album'
         400:
-          description: Bad request. body does not contain required fields
+          description: Required filled must NOT be empty
   /album/{id}:
     parameters:
       - name: id
@@ -471,9 +471,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Album'
         400:
-          description: Bad request. albumId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Album was not found.
+          description: Album not found
     put:
       tags:
         - Album
@@ -506,9 +506,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Album'
         400:
-          description: Bad request. albumId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Album was not found.
+          description: Album not found
     delete:
       tags:
         - Album
@@ -518,11 +518,11 @@ paths:
         204:
           description: Deleted succesfully
         400:
-          description: Bad request. albumId is invalid (not uuid)
+          description: It is not a uuid version 4
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
-          description: Album was not found.
+          description: Album not found
   /artist:
     get:
       tags:
@@ -565,7 +565,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Artist'
         400:
-          description: Bad request. body does not contain required fields
+          description: Required filled must NOT be empty
   /artist/{id}:
     parameters:
       - name: id
@@ -587,9 +587,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Artist'
         400:
-          description: Bad request. artistId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Artist was not found.
+          description: Artist not found
     put:
       tags:
         - Artist
@@ -617,9 +617,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Artist'
         400:
-          description: Bad request. artistId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Artist was not found.
+          description: Artist not found
     delete:
       tags:
         - Artist
@@ -629,9 +629,9 @@ paths:
         204:
           description: Delelted succesfully
         400:
-          description: Bad request. artistId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Artist was not found.
+          description: Artist not found
   /favs:
     get:
       tags:
@@ -662,9 +662,9 @@ paths:
         201:
           description: Added succesfully
         400:
-          description: Bad. trackId is invalid (not uuid)
+          description: It is not a uuid version 4
         422:
-          description: Track with id doesn't exist.
+          description: Track not found, so it cannot be added to favorites
     delete:
       tags:
         - Favorites
@@ -674,9 +674,9 @@ paths:
         204:
           description: Deleted succesfully
         400:
-          description: Bad. trackId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Track was not found.
+          description: Favorite not found
   /favs/album/{id}:
     parameters:
       - name: id
@@ -694,9 +694,9 @@ paths:
         201:
           description: Added succesfully
         400:
-          description: Bad. albumId is invalid (not uuid)
+          description: It is not a uuid version 4
         422:
-          description: Album with id doesn't exist.
+          description: Album not found, so it cannot be added to favorites
     delete:
       tags:
         - Favorites
@@ -706,9 +706,9 @@ paths:
         204:
           description: Deleted succesfully
         400:
-          description: Bad. albumId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Album was not found.
+          description: Favorite not found
   /favs/artist/{id}:
     parameters:
       - name: id
@@ -726,9 +726,9 @@ paths:
         201:
           description: Added succesfully
         400:
-          description: Bad request. artistId is invalid (not uuid)
+          description: It is not a uuid version 4
         422:
-          description: Artist with id doesn't exist.
+          description: Artist not found, so it cannot be added to favorites
     delete:
       tags:
         - Favorites
@@ -738,6 +738,6 @@ paths:
         204:
           description: Deleted succesfully
         400:
-          description: Bad request. artistId is invalid (not uuid)
+          description: It is not a uuid version 4
         404:
-          description: Artist was not found.
+          description: Favorite not found
