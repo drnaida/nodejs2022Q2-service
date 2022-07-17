@@ -69,7 +69,7 @@ export class InMemoryDatabaseService {
 
     console.log('id', the_id, 'entity', entityIdx);
     if (entityIdx !== -1) {
-      return this.database.favorites[subkey].splice(entityIdx, 1)
+      return this.database.favorites[subkey].splice(entityIdx, 1);
     }
   }
 }
