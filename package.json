@@ -24,8 +24,8 @@
     "scan:db": "docker scan postgres"
   },
   "dependencies": {
-    "@nestjs/common": "^8.0.0",
     "@nestjs/cli": "^8.0.0",
+    "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/mapped-types": "^1.0.1",
