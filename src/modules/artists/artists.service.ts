@@ -17,12 +17,12 @@ export class ArtistsService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  getAll() {
-    return this.databaseService.getAll('artists');
+  getAll(): Promise<Artist[]> {
+    return this.prismaService.artist.findMany();
   }
 
-  getById(id: string) {
-    return this.databaseService.getById(id, 'artists');
+  getById(id: string): Promise<Artist> {
+    return this.prismaService.artist.findUnique({ where: { id } });
   }
 
   create(artistDto: CreateArtistDto): Promise<Artist> {
@@ -31,12 +31,20 @@ export class ArtistsService {
     })
   };
 
-  update(id: string, product: UpdateArtistDto) {
-    return this.databaseService.update(id, product, 'artists');
+  update(id: string, product: UpdateArtistDto): Promise<Artist> {
+    return this.prismaService.artist.update({
+      where: { id },
+      data: { ...product },
+    });
   }
 
-  remove(id: string) {
-    const deleted = this.databaseService.remove(id, 'artists');
+  remove(id: string): Promise<Artist> {
+    const deleted = this.prismaService.artist.delete({
+      where: {
+        id: id,
+      },
+    })
+
     this.favoritesService.getById(id, 'artists');
     this.favoritesService.removeFavorite(id, 'artists');
     const allAlbums = this.albumsService.getAll();
@@ -62,5 +70,4 @@ export class ArtistsService {
       });
     }
     return deleted;
-  }
-}
+  }}
