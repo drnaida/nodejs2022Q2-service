@@ -18,6 +18,9 @@ services:
     depends_on:
       - postgres
   postgres:
+    build:
+      context: .
+      dockerfile: ./src/database/Dockerfile
     image: postgres
     restart: always
     environment:

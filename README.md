@@ -27,6 +27,22 @@ docker-compose up -d
 docker-compose down
 ```
 
+## Scanning for vulnerabilities
+
+**Make sure that you are logged into Docker Hub account**
+
+To scan the application image
+
+```
+npm run scan:app
+```
+
+To scan the database image
+
+```
+npm run scan:db
+```
+
 ## Working with application without Docker (not recommended because )
 
 ### Installing NPM modules

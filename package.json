@@ -19,7 +19,9 @@
     "test:auth": "cross-env TEST_MODE=auth jest --config ./test/jest-e2e.json",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "scan:app": "docker scan nodejs2022q2-service_api",
+    "scan:db": "docker scan postgres"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
