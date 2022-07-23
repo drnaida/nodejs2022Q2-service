@@ -20,28 +20,28 @@ model Artist {
 model Album {
   id String @id @default(uuid())
   name String
-  artistId: String
-  year: Int
+  artistId String
+  year Int
 }
 
-model Tracks {
+model Track {
   id String @id @default(uuid())
   name String
-  artistId: String
-  albumId: String
-  duration: Int
+  artistId String
+  albumId String
+  duration Int
 }
 
-model Users {
+model User {
   id String @id @default(uuid())
   login String
-  password: String
-  version: Int
+  password String
+  version Int
   createdAt DateTime
   updatedAt DateTime
 }
 
-model Favorites {
+model Favorite {
   id String @id @default(uuid())
 }
 

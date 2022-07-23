@@ -5,6 +5,8 @@ import { UpdateArtistDto } from './dto/update-product.dto';
 import { FavoritesService } from '../favorites/favorites.service';
 import { AlbumsService } from '../albums/albums.service';
 import { TracksService } from '../tracks/tracks.service';
+import { PrismaService } from "../prisma/prisma.service";
+import { Artist } from '@prisma/client';
 @Injectable()
 export class ArtistsService {
   constructor(
@@ -12,6 +14,7 @@ export class ArtistsService {
     private readonly favoritesService: FavoritesService,
     private readonly albumsService: AlbumsService,
     private readonly tracksService: TracksService,
+    private readonly prismaService: PrismaService,
   ) {}
 
   getAll() {
@@ -22,9 +25,11 @@ export class ArtistsService {
     return this.databaseService.getById(id, 'artists');
   }
 
-  create(artistDto: CreateArtistDto) {
-    return this.databaseService.create(artistDto, 'artists');
-  }
+  create(artistDto: CreateArtistDto): Promise<Artist> {
+    return this.prismaService.artist.create({
+      data: artistDto,
+    })
+  };
 
   update(id: string, product: UpdateArtistDto) {
     return this.databaseService.update(id, product, 'artists');
