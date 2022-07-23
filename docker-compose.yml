@@ -17,6 +17,8 @@ services:
       - ${PORT}:${PORT}
     depends_on:
       - postgres
+    networks:
+      - nest-app-network
   postgres:
     build:
       context: .
@@ -31,6 +33,8 @@ services:
       - ${DATABASE_PORT}:${DATABASE_PORT}
     volumes:
       - docker-nest-postgres:/var/lib/postgresql/data
+    networks:
+      - nest-app-network
 
 volumes:
   docker-nest-postgres:
