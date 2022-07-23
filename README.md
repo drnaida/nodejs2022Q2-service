@@ -11,13 +11,31 @@
 git clone {repository URL}
 ```
 
-## Installing NPM modules
+
+## Working with application with Docker
+
+1. Open Docker Desktop (I advice opening it as an administrator)
+2. Open PowerShell (I advice opening it as an administrator)
+3. Run the command below
+```
+docker-compose up -d
+```
+
+4. After the container is configured, open localhost:4000 in browser
+5. When you are finished with working with the application, run
+```
+docker-compose down
+```
+
+## Working with application without Docker (not recommended because )
+
+### Installing NPM modules
 
 ```
 npm install
 ```
 
-## Running application
+### Running application without docker and database
 
 ```
 npm start
@@ -27,7 +45,9 @@ After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
-## Automatic Testing
+## Testing
+
+### Automatic Testing
 
 After application running open new terminal and enter:
 
@@ -44,6 +64,8 @@ npm run test -- <path to suite>
 ```
 
 ### Testing with hands
+
+Open PostMan
 
 #### Users
 
