@@ -18,7 +18,7 @@ import {PrismaModule} from "./modules/prisma/prisma.module";
     DataBaseModule,
     UsersModule,
     FavoritesModule,
-      PrismaModule
+    PrismaModule
   ],
   controllers: [AppController],
   providers: [AppService],
