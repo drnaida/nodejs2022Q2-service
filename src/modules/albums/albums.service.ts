@@ -5,9 +5,7 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { FavoritesService } from '../favorites/favorites.service';
 import { TracksService } from '../tracks/tracks.service';
 import {PrismaService} from "../prisma/prisma.service";
-import {Album} from "@prisma/client";
-import {CreateAlbumDto} from "../albums/dto/create-albumdto";
-import {UpdateAlbumDto} from "../albums/dto/update-product.dto";
+import {Album, Prisma} from "@prisma/client";
 @Injectable()
 export class AlbumsService {
   constructor(
@@ -27,9 +25,16 @@ export class AlbumsService {
   }
 
   async create(artistDto: CreateAlbumDto): Promise<Album> {
-    return await this.prismaService.album.create({
-      data: artistDto,
-    });
+    try {
+      const data = {
+        name: artistDto.name,
+        year: artistDto.year,
+        artistId: artistDto.artistId || undefined,
+      };
+      return await this.prismaService.album.create({ data });
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
   };
 
   async update(id: string, product: UpdateAlbumDto): Promise<Album> {

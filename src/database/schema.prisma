@@ -15,13 +15,15 @@ model Artist {
   id String @id @default(uuid())
   name String
   grammy Boolean
+  album Album[]
 }
 
 model Album {
   id String @id @default(uuid())
   name String
-  artistId String
   year Int
+  artist         Artist?          @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  artistId      String?
 }
 
 model Track {
