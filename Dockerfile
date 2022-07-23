@@ -8,8 +8,6 @@ RUN npm ci && npm cache clean --force
 
 COPY --chown=node:node . .
 
-RUN npm run prisma:generate
-
 USER node
 
 FROM node:16-alpine As build
