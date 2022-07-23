@@ -1,48 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { InMemoryDatabaseService } from '../../utils/in-memory-database.service';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { FavoritesService } from '../favorites/favorites.service';
 import { TracksService } from '../tracks/tracks.service';
+import {PrismaService} from "../prisma/prisma.service";
+import {Album} from "@prisma/client";
+import {CreateAlbumDto} from "../albums/dto/create-albumdto";
+import {UpdateAlbumDto} from "../albums/dto/update-product.dto";
 @Injectable()
 export class AlbumsService {
   constructor(
     private readonly databaseService: InMemoryDatabaseService,
     private readonly favoritesService: FavoritesService,
     private readonly tracksService: TracksService,
-  ) {}
-
-  getAll() {
-    return this.databaseService.getAll('albums');
+    private readonly prismaService: PrismaService,
+  ) {
   }
 
-  getById(id: string) {
-    return this.databaseService.getById(id, 'albums');
+  async getAll(): Promise<Album[]> {
+    return this.prismaService.album.findMany();
   }
 
-  create(artistDto: CreateAlbumDto) {
-    return this.databaseService.create(artistDto, 'albums');
+  async getById(id: string): Promise<Album> {
+    return await this.prismaService.album.findUnique({where: {id}});
   }
 
-  update(id: string, product: UpdateAlbumDto) {
-    return this.databaseService.update(id, product, 'albums');
-  }
+  async create(artistDto: CreateAlbumDto): Promise<Album> {
+    return await this.prismaService.album.create({
+      data: artistDto,
+    });
+  };
 
-  remove(id: string) {
-    const deleted = this.databaseService.remove(id, 'albums');
-    this.favoritesService.getById(id, 'albums');
-    this.favoritesService.removeFavorite(id, 'albums');
-    const allTracks = this.tracksService.getAll();
-    if (allTracks.length > 0) {
-      allTracks.forEach((track) => {
-        if (track.albumId == id) {
-          const new_album = track;
-          new_album.albumId = null;
-          console.log('new_album', new_album);
-          this.tracksService.update(track.id, new_album);
-        }
+  async update(id: string, product: UpdateAlbumDto): Promise<Album> {
+    try {
+      return await this.prismaService.album.update({
+        where: {id},
+        data: {...product},
       });
+    } catch (err) {
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     }
-    return deleted;
+
+  }
+
+  async remove(id: string): Promise<Album> {
+    try {
+      const deleted = await this.prismaService.album.delete({
+        where: {
+          id: id,
+        },
+      })
+      return deleted;
+    } catch (err) {
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+    }
   }
 }

@@ -24,10 +24,10 @@ export class AlbumsController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string) {
+  async getOne(@Param('id') id: string) {
     try {
       if (checkThatThisIsUUID4(id)) {
-        const album = this.albumsService.getById(id);
+        const album = await this.albumsService.getById(id);
         if (!album) {
           throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
         } else {
@@ -63,11 +63,7 @@ export class AlbumsController {
     try {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.albumsService.getById(id);
-        if (!artist) {
-          throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
-        } else {
-          return this.albumsService.remove(id);
-        }
+        return this.albumsService.remove(id);
       } else {
         throw new HttpException(
           'It is not a uuid version 4',
@@ -85,11 +81,7 @@ export class AlbumsController {
     try {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.albumsService.getById(id);
-        if (!artist) {
-          throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
-        } else {
-          return this.albumsService.update(id, updateProduct);
-        }
+        return this.albumsService.update(id, updateProduct);
       } else {
         throw new HttpException(
           'It is not a uuid version 4',
