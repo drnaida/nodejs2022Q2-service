@@ -37,11 +37,15 @@ export class UsersService {
 
   async create(artistDto: CreateUserDto): Promise<any> {
     try {
+      const time = Date.now();
+      artistDto.createdAt = time;
+      artistDto.updatedAt = time;
+      console.log(artistDto);
       const created = await this.prismaService.user.create({
         data: artistDto
       });
       const { password, ...rest } = created;
-      return plainToInstance(User, rest);
+      return rest;
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }

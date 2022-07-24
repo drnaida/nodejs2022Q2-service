@@ -10,7 +10,7 @@ export class CreateUserDto {
   @IsOptional()
   version: number;
   @IsOptional()
-  createdAt: Date;
+  createdAt: number;
   @IsOptional()
-  updatedAt: Date;
+  updatedAt: number;
 }
