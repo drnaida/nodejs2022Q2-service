@@ -5,12 +5,4 @@ import 'dotenv/config';
 
 @Injectable()
 export class PrismaService extends PrismaClient {
-    constructor() {
-        console.log('Prisma construztor');
-        super();
-    }
-    async onModuleInit() {
-        console.log('Module init?');
-        await this.$connect();
-    }
 }

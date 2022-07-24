@@ -24,10 +24,11 @@ export class TracksController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string) {
+  async getOne(@Param('id') id: string) {
     try {
       if (checkThatThisIsUUID4(id)) {
-        const track = this.tracksService.getById(id);
+        const track = await this.tracksService.getById(id);
+        console.log(track);
         if (!track) {
           throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
         } else {
@@ -46,15 +47,8 @@ export class TracksController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createTrack: CreateTrackDto) {
-    try {
-      return this.tracksService.create(createTrack);
-    } catch (err) {
-      throw new HttpException(
-        'Required filled must NOT be empty',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+  async create(@Body() createTrack: CreateTrackDto) {
+    return this.tracksService.create(createTrack);
   }
 
   @Delete(':id')
@@ -63,11 +57,7 @@ export class TracksController {
     try {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.tracksService.getById(id);
-        if (!artist) {
-          throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
-        } else {
-          return this.tracksService.remove(id);
-        }
+        return this.tracksService.remove(id);
       } else {
         throw new HttpException(
           'It is not a uuid version 4',
@@ -85,11 +75,7 @@ export class TracksController {
     try {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.tracksService.getById(id);
-        if (!artist) {
-          throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
-        } else {
-          return this.tracksService.update(id, updateProduct);
-        }
+        return this.tracksService.update(id, updateProduct);
       } else {
         throw new HttpException(
           'It is not a uuid version 4',
