@@ -24,10 +24,10 @@ export class UsersController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string) {
+  async getOne(@Param('id') id: string) {
     try {
       if (checkThatThisIsUUID4(id)) {
-        const user = this.usersService.getById(id);
+        const user = await this.usersService.getById(id);
         if (!user) {
           throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         } else {

@@ -4,7 +4,6 @@ import { InMemoryDatabaseService } from '../../utils/in-memory-database.service'
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { User } from './user.entity';
-import {plainToInstance} from "class-transformer";
 
 @Injectable()
 export class UsersService {
@@ -51,16 +50,37 @@ export class UsersService {
     }
   }
 
-  async update(id: string, product: UpdatePasswordDto): Promise<User> {
+  async update(id: string, product: UpdatePasswordDto): Promise<any> {
     try {
-      return await this.prismaService.user.update({
-        where: { id },
-        data: {
+      const user = await this.prismaService.user.findUnique({where: { id }});
+      if (user) {
+        const time = Date.now();
+        if (user.password == product.oldPassword) {
+          const answer = await this.prismaService.user.update({
+            where: { id },
+            data: {
+              password: product.newPassword,
+              version: user.version + 1,
+              updatedAt: time,
+            },
+          });
+          const { password, ...rest } = answer;
+          return rest;
+        } else {
+          throw new HttpException(
+              'Wrong previous/old password',
+              HttpStatus.FORBIDDEN,
+          );
+        }
+      } else {
+        throw new HttpException(
+            'Not found',
+            HttpStatus.NOT_FOUND,
+        );
+      }
 
-        },
-      });
     } catch (err) {
-      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(err.message, err.status);
     }
   }
 
