@@ -12,25 +12,30 @@ datasource db {
 }
 
 model Artist {
-  id String @id @default(uuid())
-  name String
+  id     String  @id @default(uuid())
+  name   String
   grammy Boolean
-  album Album[]
+  Album           Album[]
+  Track Track[]
 }
 
 model Album {
-  id String @id @default(uuid())
-  name String
-  year Int
+  id             String           @id @default(uuid())
+  name           String
+  year           Int
   artist         Artist?          @relation(fields: [artistId], references: [id], onDelete: SetNull)
-  artistId      String?
+  artistId       String?          @unique
+
+  Track Track[]
 }
 
 model Track {
   id String @id @default(uuid())
   name String
-  artistId String
-  albumId String
+  artist   Artist? @relation(fields: [artistId], references: [id])
+   artistId String? @unique
+   album   Album?  @relation(fields: [albumId], references: [id])
+   albumId String? @unique
   duration Int
 }
 

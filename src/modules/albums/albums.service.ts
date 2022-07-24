@@ -5,7 +5,8 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { FavoritesService } from '../favorites/favorites.service';
 import { TracksService } from '../tracks/tracks.service';
 import {PrismaService} from "../prisma/prisma.service";
-import {Album, Prisma} from "@prisma/client";
+import {Album} from "./album.entity";
+import {Prisma} from "@prisma/client";
 @Injectable()
 export class AlbumsService {
   constructor(
@@ -29,7 +30,7 @@ export class AlbumsService {
       const data = {
         name: artistDto.name,
         year: artistDto.year,
-        artistId: artistDto.artistId || undefined,
+        artistId: artistDto.artistId != null ? artistDto.artistId : undefined,
       };
       return await this.prismaService.album.create({ data });
     } catch (e) {

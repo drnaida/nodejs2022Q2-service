@@ -1,19 +1,21 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "Artist" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "grammy" BOOLEAN NOT NULL,
 
-  - You are about to drop the `Favorites` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Tracks` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Users` table. If the table is not empty, all the data it contains will be lost.
+    CONSTRAINT "Artist_pkey" PRIMARY KEY ("id")
+);
 
-*/
--- DropTable
-DROP TABLE "Favorites";
+-- CreateTable
+CREATE TABLE "Album" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "year" INTEGER NOT NULL,
+    "artistId" TEXT,
 
--- DropTable
-DROP TABLE "Tracks";
-
--- DropTable
-DROP TABLE "Users";
+    CONSTRAINT "Album_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Track" (
@@ -44,3 +46,9 @@ CREATE TABLE "Favorite" (
 
     CONSTRAINT "Favorite_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Album_artistId_key" ON "Album"("artistId");
+
+-- AddForeignKey
+ALTER TABLE "Album" ADD CONSTRAINT "Album_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "Artist"("id") ON DELETE SET NULL ON UPDATE CASCADE;

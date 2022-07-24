@@ -14,10 +14,12 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { AlbumsService } from './albums.service';
 import { checkThatThisIsUUID4 } from '../../utils/checkUUID';
+import {PrismaService} from "../prisma/prisma.service";
 
 @Controller('album')
 export class AlbumsController {
-  constructor(private readonly albumsService: AlbumsService) {}
+  constructor(private readonly albumsService: AlbumsService,
+              private readonly prismaService: PrismaService) {}
   @Get()
   getAll() {
     return this.albumsService.getAll();
@@ -46,15 +48,9 @@ export class AlbumsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createAlbum: CreateAlbumDto) {
-    try {
+  async create(@Body() createAlbum: CreateAlbumDto) {
+      console.log('bbbbbb', createAlbum.artistId);
       return this.albumsService.create(createAlbum);
-    } catch (err) {
-      throw new HttpException(
-        'Required filled must NOT be empty',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
   }
 
   @Delete(':id')

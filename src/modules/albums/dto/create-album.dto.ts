@@ -4,7 +4,6 @@ export class CreateAlbumDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-  @IsString()
   @IsOptional()
   artistId: string | null;
   @IsNotEmpty()
