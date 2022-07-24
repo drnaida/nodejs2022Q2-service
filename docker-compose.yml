@@ -1,0 +1,46 @@
+services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+    command: npm run start:dev
+    restart: always
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+    networks:
+      - nest-app-network
+  postgres:
+    build:
+      context: .
+      dockerfile: ./src/database/Dockerfile
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    volumes:
+      - docker-nest-postgres:/var/lib/postgresql/data
+    networks:
+      - nest-app-network
+
+volumes:
+  docker-nest-postgres:
+
+
+networks:
+  nest-app-network:
+    name: nest-app-network
+    driver: bridge
