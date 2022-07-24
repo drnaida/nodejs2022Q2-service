@@ -47,14 +47,7 @@ export class UsersController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createUser: CreateUserDto) {
-    try {
-      return this.usersService.create(createUser);
-    } catch (err) {
-      throw new HttpException(
-        'Required filled must NOT be empty',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    return this.usersService.create(createUser);
   }
 
   @Delete(':id')
@@ -63,11 +56,7 @@ export class UsersController {
     try {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.usersService.getById(id);
-        if (!artist) {
-          throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-        } else {
-          return this.usersService.remove(id);
-        }
+        return this.usersService.remove(id);
       } else {
         throw new HttpException(
           'It is not a uuid version 4',
@@ -85,11 +74,7 @@ export class UsersController {
     try {
       if (checkThatThisIsUUID4(id)) {
         const artist = this.usersService.getById(id);
-        if (!artist) {
-          throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-        } else {
-          return this.usersService.update(id, updateProduct);
-        }
+        return this.usersService.update(id, updateProduct);
       } else {
         throw new HttpException(
           'It is not a uuid version 4',

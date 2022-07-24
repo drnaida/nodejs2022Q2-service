@@ -1,43 +1,75 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InMemoryDatabaseService } from '../../utils/in-memory-database.service';
 import { UpdatePasswordDto } from './dto/update-user.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { User } from './user.entity';
+import {plainToInstance} from "class-transformer";
+
 @Injectable()
 export class UsersService {
-  constructor(private readonly databaseService: InMemoryDatabaseService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  getAll() {
-    return this.databaseService.getAll('users');
+  async getAll(): Promise<any> {
+    return this.prismaService.user.findMany({
+      select: {
+        id: true,
+        login: true,
+        createdAt: true,
+        updatedAt: true,
+        version: true,
+      },
+    });
   }
 
-  getById(id: string) {
-    const user = this.databaseService.getById(id, 'users');
-    if (user) {
-      const { password, ...rest } = user;
-      return rest;
+  async getById(id: string): Promise<any> {
+    return await this.prismaService.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        login: true,
+        createdAt: true,
+        updatedAt: true,
+        version: true,
+      },
+    });
+  }
+
+  async create(artistDto: CreateUserDto): Promise<any> {
+    try {
+      const created = await this.prismaService.user.create({
+        data: artistDto
+      });
+      const { password, ...rest } = created;
+      return plainToInstance(User, rest);
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  create(artistDto: CreateUserDto) {
-    const user = this.databaseService.create(artistDto, 'users');
-    const time = new Date().getTime();
-    user.version = 1;
-    user.createdAt = +time;
-    user.updatedAt = +time;
-    const { password, ...rest } = user;
-    return rest;
+  async update(id: string, product: UpdatePasswordDto): Promise<User> {
+    try {
+      return await this.prismaService.user.update({
+        where: { id },
+        data: {
+
+        },
+      });
+    } catch (err) {
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+    }
   }
 
-  update(id: string, product: UpdatePasswordDto) {
-    const user = this.databaseService.updatePassword(id, product, 'users');
-    user.version += 1;
-    const time = new Date().getTime();
-    user.updatedAt = +time;
-    const { password, ...rest } = user;
-    return rest;
-  }
-
-  remove(id: string) {
-    return this.databaseService.remove(id, 'users');
+  async remove(id: string): Promise<User> {
+    try {
+      const deleted = await this.prismaService.user.delete({
+        where: {
+          id: id,
+        },
+      });
+      return deleted;
+    } catch (err) {
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+    }
   }
 }
