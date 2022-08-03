@@ -11,8 +11,20 @@ export class FavoritesService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  async getAll(): Promise<Track[]> {
-    return this.prismaService.track.findMany();
+  async getAll(): Promise<any> {
+    const getAllArtists = await this.prismaService.artistsFavorites.findMany({
+      include: {
+        artist: {}
+      }
+    });
+    const getAllTracks = [];
+    const getAllAlbums = [];
+
+    return {
+      artists: getAllArtists,
+      albums: getAllAlbums,
+      tracks: getAllTracks,
+    };
   }
 
   async createArtist(id: string): Promise<any> {
