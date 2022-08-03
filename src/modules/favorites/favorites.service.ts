@@ -20,11 +20,19 @@ export class FavoritesService {
     const showArtistsInRightWay = getAllArtists.map((a) => {
       return a.artist;
     });
-    const getAllTracks = [];
+    const getAllTracks = await this.prismaService.tracksFavorites.findMany({
+      include: {
+        track: {}
+      }
+    });
     const showTracksInRightWay = getAllTracks.map((a) => {
       return a.track;
     });
-    const getAllAlbums = [];
+    const getAllAlbums = await this.prismaService.albumsFavorites.findMany({
+      include: {
+        album: {}
+      }
+    });
     const showAlbumsInRightWay = getAllAlbums.map((a) => {
       return a.album;
     });
@@ -45,8 +53,39 @@ export class FavoritesService {
         const createdArtist = await this.prismaService.artistsFavorites.create({
           data: { artistId: id },
         });
-        console.log('lalala', createdArtist);
         return createdArtist;
+      }
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async createTrack(id: string): Promise<any> {
+    try {
+      const track = await this.prismaService.track.findUnique({
+        where: { id },
+      });
+      if (track) {
+        const createdTrack = await this.prismaService.tracksFavorites.create({
+          data: { trackId: id },
+        });
+        return createdTrack;
+      }
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async createAlbum(id: string): Promise<any> {
+    try {
+      const album = await this.prismaService.album.findUnique({
+        where: { id },
+      });
+      if (album) {
+        const createdAlbum = await this.prismaService.albumsFavorites.create({
+          data: { albumId: id },
+        });
+        return createdAlbum;
       }
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
@@ -58,6 +97,32 @@ export class FavoritesService {
       const deleted = await this.prismaService.artistsFavorites.delete({
         where: {
           artistId: id,
+        },
+      });
+      return deleted;
+    } catch (err) {
+      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+    }
+  }
+
+  async removeTrack(id: string): Promise<any> {
+    try {
+      const deleted = await this.prismaService.tracksFavorites.delete({
+        where: {
+          trackId: id,
+        },
+      });
+      return deleted;
+    } catch (err) {
+      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
+    }
+  }
+
+  async removeAlbum(id: string): Promise<any> {
+    try {
+      const deleted = await this.prismaService.albumsFavorites.delete({
+        where: {
+          albumId: id,
         },
       });
       return deleted;

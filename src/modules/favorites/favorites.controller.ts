@@ -27,90 +27,6 @@ export class FavoritesController {
     return this.favoritesService.getAll();
   }
 
-  // @Post('track/:id')
-  // @HttpCode(HttpStatus.CREATED)
-  // createTrack(@Param('id') id: string) {
-  //   try {
-  //     if (checkThatThisIsUUID4(id)) {
-  //       const artist = this.tracksService.getById(id);
-  //       if (!artist) {
-  //         throw new HttpException(
-  //           'Track not found, so it cannot be added to favorites',
-  //           HttpStatus.UNPROCESSABLE_ENTITY,
-  //         );
-  //       } else {
-  //         return this.favoritesService.createFavorite(id, 'tracks');
-  //       }
-  //     } else {
-  //       throw new HttpException(
-  //         'It is not a uuid version 4',
-  //         HttpStatus.BAD_REQUEST,
-  //       );
-  //     }
-  //   } catch (err) {
-  //     throw new HttpException(err.message, err.status);
-  //   }
-  // }
-  //
-  // @Delete('track/:id')
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // removeTrack(@Param('id') id: string) {
-  //   try {
-  //     if (checkThatThisIsUUID4(id)) {
-  //       return this.favoritesService.removeTrack(id);
-  //     } else {
-  //       throw new HttpException(
-  //         'It is not a uuid version 4',
-  //         HttpStatus.BAD_REQUEST,
-  //       );
-  //     }
-  //   } catch (err) {
-  //     throw new HttpException(err.message, err.status);
-  //   }
-  // }
-  //
-  // @Post('album/:id')
-  // @HttpCode(HttpStatus.CREATED)
-  // createAlbum(@Param('id') id: string) {
-  //   try {
-  //     if (checkThatThisIsUUID4(id)) {
-  //       const artist = this.albumsService.getById(id);
-  //       if (!artist) {
-  //         throw new HttpException(
-  //           'Album not found, so it cannot be added to favorites',
-  //           HttpStatus.UNPROCESSABLE_ENTITY,
-  //         );
-  //       } else {
-  //         return this.favoritesService.createFavorite(id);
-  //       }
-  //     } else {
-  //       throw new HttpException(
-  //         'It is not a uuid version 4',
-  //         HttpStatus.BAD_REQUEST,
-  //       );
-  //     }
-  //   } catch (err) {
-  //     throw new HttpException(err.message, err.status);
-  //   }
-  // }
-  //
-  // @Delete('album/:id')
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // removeAlbum(@Param('id') id: string) {
-  //   try {
-  //     if (checkThatThisIsUUID4(id)) {
-  //       return this.favoritesService.removeAlbum(id);
-  //     } else {
-  //       throw new HttpException(
-  //         'It is not a uuid version 4',
-  //         HttpStatus.BAD_REQUEST,
-  //       );
-  //     }
-  //   } catch (err) {
-  //     throw new HttpException(err.message, err.status);
-  //   }
-  // }
-
   @Post('artist/:id')
   @HttpCode(HttpStatus.CREATED)
   async createArtist(@Param('id') id: string) {
@@ -146,6 +62,90 @@ export class FavoritesController {
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
+        );
+      }
+    } catch (err) {
+      throw new HttpException(err.message, err.status);
+    }
+  }
+
+  @Post('track/:id')
+  @HttpCode(HttpStatus.CREATED)
+  async createTrack(@Param('id') id: string) {
+    try {
+      if (checkThatThisIsUUID4(id)) {
+        const track = await this.tracksService.getById(id);
+        if (!track) {
+          throw new HttpException(
+              'Artist not found, so it cannot be added to favorites',
+              HttpStatus.UNPROCESSABLE_ENTITY,
+          );
+        } else {
+          return await this.favoritesService.createTrack(id);
+        }
+      } else {
+        throw new HttpException(
+            'It is not a uuid version 4',
+            HttpStatus.BAD_REQUEST,
+        );
+      }
+    } catch (err) {
+      throw new HttpException(err.message, err.status);
+    }
+  }
+
+  @Delete('track/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeTrack(@Param('id') id: string) {
+    try {
+      if (checkThatThisIsUUID4(id)) {
+        return this.favoritesService.removeTrack(id);
+      } else {
+        throw new HttpException(
+            'It is not a uuid version 4',
+            HttpStatus.BAD_REQUEST,
+        );
+      }
+    } catch (err) {
+      throw new HttpException(err.message, err.status);
+    }
+  }
+
+  @Post('album/:id')
+  @HttpCode(HttpStatus.CREATED)
+  async createAlbum(@Param('id') id: string) {
+    try {
+      if (checkThatThisIsUUID4(id)) {
+        const album = await this.albumsService.getById(id);
+        if (!album) {
+          throw new HttpException(
+              'Artist not found, so it cannot be added to favorites',
+              HttpStatus.UNPROCESSABLE_ENTITY,
+          );
+        } else {
+          return await this.favoritesService.createAlbum(id);
+        }
+      } else {
+        throw new HttpException(
+            'It is not a uuid version 4',
+            HttpStatus.BAD_REQUEST,
+        );
+      }
+    } catch (err) {
+      throw new HttpException(err.message, err.status);
+    }
+  }
+
+  @Delete('album/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeAlbum(@Param('id') id: string) {
+    try {
+      if (checkThatThisIsUUID4(id)) {
+        return this.favoritesService.removeAlbum(id);
+      } else {
+        throw new HttpException(
+            'It is not a uuid version 4',
+            HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
