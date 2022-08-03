@@ -17,13 +17,22 @@ export class FavoritesService {
         artist: {}
       }
     });
+    const showArtistsInRightWay = getAllArtists.map((a) => {
+      return a.artist;
+    });
     const getAllTracks = [];
+    const showTracksInRightWay = getAllTracks.map((a) => {
+      return a.track;
+    });
     const getAllAlbums = [];
+    const showAlbumsInRightWay = getAllAlbums.map((a) => {
+      return a.album;
+    });
 
     return {
-      artists: getAllArtists,
-      albums: getAllAlbums,
-      tracks: getAllTracks,
+      artists: showArtistsInRightWay,
+      albums: showAlbumsInRightWay,
+      tracks: showTracksInRightWay,
     };
   }
 
