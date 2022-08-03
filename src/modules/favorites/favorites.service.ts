@@ -1,72 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InMemoryDatabaseService } from '../../utils/in-memory-database.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { Track } from '../tracks/track.entity';
+import { CreateTrackDto } from '../tracks/dto/create-track.dto';
+import { UpdateTrackDto } from '../tracks/dto/update-track.dto';
 @Injectable()
 export class FavoritesService {
-  constructor(private readonly databaseService: InMemoryDatabaseService) {}
+  constructor(
+    private readonly databaseService: InMemoryDatabaseService,
+    private readonly prismaService: PrismaService,
+  ) {}
 
-  getAll() {
-    const favorites = this.databaseService.getAll('favorites');
-    for (const element in favorites) {
-      if (element == 'artists') {
-        const result = favorites['artists'].map((item) => {
-          if (item != null) {
-            return this.databaseService.getById(item.id, 'artists');
-          }
-        });
+  async getAll(): Promise<Track[]> {
+    return this.prismaService.track.findMany();
+  }
 
-        const result1 = result.filter((item) => item !== null);
-        favorites.artists = result1;
-      } else if (element == 'albums') {
-        const result = favorites['albums'].map((item) => {
-          if (item != null) {
-            return this.databaseService.getById(item.id, 'albums');
-          }
+  async createArtist(id: string): Promise<any> {
+    try {
+      const artist = await this.prismaService.artist.findUnique({where: {id}});
+      if (artist) {
+        const createdArtist = await this.prismaService.artistsFavorites.create({
+          data: { artistId: id },
         });
-        const result1 = result.filter((item) => item !== null);
-        favorites.albums = result1;
-      } else if (element == 'tracks') {
-        const result = favorites['tracks'].map((item) => {
-          if (item != null) {
-            return this.databaseService.getById(item.id, 'tracks');
-          }
-        });
-        const result1 = result.filter((item) => item !== null);
-        favorites.tracks = result1;
+        console.log('lalala', createdArtist);
+        return createdArtist;
       }
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
-    console.log('getAll', favorites);
-    return favorites;
   }
 
-  getById(id: string, subkey) {
-    let result;
-    if (subkey == 'artists') {
-      result = this.databaseService.getById(id, 'artists');
-    } else if (subkey == 'albums') {
-      result = this.databaseService.getById(id, 'albums');
-    } else if (subkey == 'tracks') {
-      result = this.databaseService.getById(id, 'tracks');
-    }
-    return result;
-  }
-
-  create(id: string) {
-    return this.databaseService.create(id, 'favorites');
-  }
-
-  createFavorite(id: string, subkey) {
-    this.databaseService.createFavorite(id, subkey);
-    const result = this.databaseService.getById(id, subkey);
-    console.log('createResult', result);
-    return result;
-  }
-
-  remove(id: string) {
-    return this.databaseService.remove(id, 'favorites');
-  }
-  removeFavorite(id: string, subkey) {
-    const result = this.databaseService.removeFavorite(id, subkey);
-    console.log('deleted', result);
-    return result;
-  }
+  // async removeArtist(id: string): Promise<any> {
+  //   try {
+  //     const deleted = await this.prismaService.artistsFavorites.delete({
+  //       where: {
+  //         id: id,
+  //       },
+  //     });
+  //     return deleted;
+  //   } catch (err) {
+  //     throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+  //   }
+  // }
 }
