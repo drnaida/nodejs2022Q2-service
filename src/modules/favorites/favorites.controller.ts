@@ -136,20 +136,20 @@ export class FavoritesController {
     }
   }
 
-  // @Delete('artist/:id')
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // removeArtist(@Param('id') id: string) {
-  //   try {
-  //     if (checkThatThisIsUUID4(id)) {
-  //       return this.favoritesService.removeArtist(id);
-  //     } else {
-  //       throw new HttpException(
-  //         'It is not a uuid version 4',
-  //         HttpStatus.BAD_REQUEST,
-  //       );
-  //     }
-  //   } catch (err) {
-  //     throw new HttpException(err.message, err.status);
-  //   }
-  // }
+  @Delete('artist/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeArtist(@Param('id') id: string) {
+    try {
+      if (checkThatThisIsUUID4(id)) {
+        return this.favoritesService.removeArtist(id);
+      } else {
+        throw new HttpException(
+          'It is not a uuid version 4',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    } catch (err) {
+      throw new HttpException(err.message, err.status);
+    }
+  }
 }

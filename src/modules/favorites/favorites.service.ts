@@ -17,7 +17,9 @@ export class FavoritesService {
 
   async createArtist(id: string): Promise<any> {
     try {
-      const artist = await this.prismaService.artist.findUnique({where: {id}});
+      const artist = await this.prismaService.artist.findUnique({
+        where: { id },
+      });
       if (artist) {
         const createdArtist = await this.prismaService.artistsFavorites.create({
           data: { artistId: id },
@@ -30,16 +32,16 @@ export class FavoritesService {
     }
   }
 
-  // async removeArtist(id: string): Promise<any> {
-  //   try {
-  //     const deleted = await this.prismaService.artistsFavorites.delete({
-  //       where: {
-  //         id: id,
-  //       },
-  //     });
-  //     return deleted;
-  //   } catch (err) {
-  //     throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
-  //   }
-  // }
+  async removeArtist(id: string): Promise<any> {
+    try {
+      const deleted = await this.prismaService.artistsFavorites.delete({
+        where: {
+          artistId: id,
+        },
+      });
+      return deleted;
+    } catch (err) {
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+    }
+  }
 }
