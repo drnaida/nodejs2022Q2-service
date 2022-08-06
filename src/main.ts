@@ -6,10 +6,12 @@ import { dirname, join } from 'path';
 import { parse } from 'yaml';
 import 'dotenv/config';
 import { readFile } from 'fs/promises';
-import {AtGuard} from "./utils/guards";
+import {MyLogger} from "./modules/logger/logger.service";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new MyLogger(),
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
