@@ -6,6 +6,7 @@ import { dirname, join } from 'path';
 import { parse } from 'yaml';
 import 'dotenv/config';
 import { readFile } from 'fs/promises';
+import {AtGuard} from "./utils/guards";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

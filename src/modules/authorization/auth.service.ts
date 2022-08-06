@@ -10,12 +10,14 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuid } from 'uuid';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly JwtService: JwtService,
     private readonly prisma: PrismaService,
+    private readonly config: ConfigService,
   ) {}
   hashData(data: string) {
     return bcrypt.hash(data, 10);
@@ -112,11 +114,13 @@ export class AuthService {
     return tokens;
   }
 
-  async getRefreshTokens(rt: string) {
+  async refresh(rt: string) {
     try {
-      
+      const request = await this.JwtService.verifyAsync(rt, {
+        secret: this.config.get<string>('JWT_SECRET_REFRESH_KEY'),
+      });
 
-      const userId = reqeust['userId'];
+      const userId = request['userId'];
       return this.refreshTokens(userId, rt);
     } catch (error) {
       if (error.message === 'invalid signature') {

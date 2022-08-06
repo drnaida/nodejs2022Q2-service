@@ -9,6 +9,8 @@ import { UsersModule } from './modules/users/users.module';
 import { FavoritesModule } from './modules/favorites/favorites.module';
 import {PrismaModule} from "./modules/prisma/prisma.module";
 import {AuthModule} from "./modules/authorization/auth.module";
+import {APP_GUARD} from "@nestjs/core";
+import {AtGuard} from "./utils/guards";
 
 @Module({
   imports: [
@@ -20,9 +22,9 @@ import {AuthModule} from "./modules/authorization/auth.module";
     UsersModule,
     FavoritesModule,
     PrismaModule,
-      AuthModule
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: APP_GUARD, useClass: AtGuard }],
 })
 export class AppModule {}
