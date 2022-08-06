@@ -29,12 +29,14 @@ export class AuthController {
   }
 
   @Public()
+  @HttpCode(HttpStatus.OK)
   @Post('login')
   login(@Body() login: AuthDto) {
     return this.authorizationService.login(login);
   }
 
   @Public()
+  @HttpCode(HttpStatus.OK)
   @Post('refresh')
   @HttpCode(HttpStatus.CREATED)
   async refresh(@Body() { refreshToken }) {
