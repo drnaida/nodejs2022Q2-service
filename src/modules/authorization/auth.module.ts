@@ -7,6 +7,8 @@ import { TracksModule } from '../tracks/tracks.module';
 import { AtStrategy } from './strategies/at.strategy';
 import { RtStrategy } from './strategies/rt.strategy';
 import { JwtModule } from '@nestjs/jwt';
+import {UsersModule} from "../users/users.module";
+import {PrismaModule} from "../prisma/prisma.module";
 
 @Module({
   providers: [AuthService, AtStrategy, RtStrategy],
@@ -16,6 +18,8 @@ import { JwtModule } from '@nestjs/jwt';
     forwardRef(() => FavoritesModule),
     TracksModule,
     JwtModule.register({}),
+    UsersModule,
+    PrismaModule,
   ],
   exports: [AuthService],
 })

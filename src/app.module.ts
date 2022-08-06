@@ -8,6 +8,7 @@ import { AlbumsModule } from './modules/albums/albums.module';
 import { UsersModule } from './modules/users/users.module';
 import { FavoritesModule } from './modules/favorites/favorites.module';
 import {PrismaModule} from "./modules/prisma/prisma.module";
+import {AuthModule} from "./modules/authorization/auth.module";
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import {PrismaModule} from "./modules/prisma/prisma.module";
     DataBaseModule,
     UsersModule,
     FavoritesModule,
-    PrismaModule
+    PrismaModule,
+      AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

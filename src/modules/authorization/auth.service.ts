@@ -14,9 +14,8 @@ import { v4 as uuid } from 'uuid';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UsersService,
-    private JwtService: JwtService,
-    private prisma: PrismaService,
+    private readonly JwtService: JwtService,
+    private readonly prisma: PrismaService,
   ) {}
   hashData(data: string) {
     return bcrypt.hash(data, 10);

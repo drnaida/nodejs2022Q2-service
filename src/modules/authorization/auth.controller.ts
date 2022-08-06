@@ -20,8 +20,6 @@ import * as bcrypt from 'bcrypt';
 export class AuthController {
   constructor(private readonly authorizationService: AuthService) {}
 
-
-
   @Post('signup')
   async signup(@Body() signup: CreateUserDto) {
     const user = this.authorizationService.signup(signup);
