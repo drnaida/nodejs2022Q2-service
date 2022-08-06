@@ -8,7 +8,8 @@ import {
   Put,
   HttpCode,
   HttpStatus,
-  HttpException,
+  HttpException, Req,
+    UseGuards
 } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
@@ -30,9 +31,10 @@ export class AuthController {
     return this.authorizationService.login(login);
   }
 
+  @UseGuards(RtGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.CREATED)
-  refresh(@Body() refresh: AuthDto) {
-    return this.authorizationService.refresh(refresh);
+  async refresh(@Body() { refreshToken }) {
+    return this.authorizationService.getRefreshTokens(refreshToken);
   }
 }

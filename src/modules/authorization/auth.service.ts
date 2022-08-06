@@ -1,4 +1,4 @@
-import {ForbiddenException, HttpException, HttpStatus, Injectable} from '@nestjs/common';
+import {ForbiddenException, HttpException, HttpStatus, Injectable, UnauthorizedException} from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { InMemoryDatabaseService } from '../../utils/in-memory-database.service';
 import { FavoritesService } from '../favorites/favorites.service';
@@ -98,7 +98,31 @@ export class AuthService {
     return tokens;
   }
 
-  async refresh(dto: AuthDto) {
-    return 'sdfs';
+  async refreshTokens(userId: string, rt: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user || !user.hashedRt)
+      throw new ForbiddenException('Access denied');
+
+    const rtMatches = await bcrypt.compare(rt, user.hashedRt);
+    if (!rtMatches) throw new ForbiddenException('Access denied');
+
+    const tokens = await this.getTokens(user.id, user.login);
+    await this.updateRtHash(user.id, tokens.refresh_token);
+    return tokens;
+  }
+
+  async getRefreshTokens(rt: string) {
+    try {
+      
+
+      const userId = reqeust['userId'];
+      return this.refreshTokens(userId, rt);
+    } catch (error) {
+      if (error.message === 'invalid signature') {
+        throw new ForbiddenException(error.message);
+      }
+      throw new UnauthorizedException(error.message);
+    }
   }
 }
