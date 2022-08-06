@@ -11,7 +11,7 @@ const getTokenAndUserId = async (request) => {
     .post(authRoutes.signup)
     .set('Accept', 'application/json')
     .send(createUserDto);
-
+  console.log(response);
   const mockUserId = response.body.id;
 
   // get token

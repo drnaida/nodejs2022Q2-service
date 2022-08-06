@@ -38,8 +38,8 @@ export class AuthService {
     ]);
 
     return {
-      access_token: at,
-      refresh_token: rt,
+      accessToken: at,
+      refreshToken: rt,
     };
   }
 
@@ -57,7 +57,7 @@ export class AuthService {
     });
 
     const tokens = await this.getTokens(newUser.id, newUser.login);
-    await this.updateRtHash(newUser.id, tokens.refresh_token);
+    await this.updateRtHash(newUser.id, tokens.refreshToken);
     return tokens;
   }
 
@@ -87,7 +87,8 @@ export class AuthService {
       throw new ForbiddenException('Access Denied');
 
     const tokens = await this.getTokens(user.id, user.login);
-    await this.updateRtHash(user.id, tokens.refresh_token);
+    await this.updateRtHash(user.id, tokens.refreshToken);
+    console.log(tokens);
     return tokens;
   }
 
@@ -101,7 +102,7 @@ export class AuthService {
     if (!rtMatches) throw new ForbiddenException('Access denied');
 
     const tokens = await this.getTokens(user.id, user.login);
-    await this.updateRtHash(user.id, tokens.refresh_token);
+    await this.updateRtHash(user.id, tokens.refreshToken);
     return tokens;
   }
 
@@ -119,6 +120,16 @@ export class AuthService {
       }
       console.log(error);
       throw new UnauthorizedException('ba');
+    }
+  }
+
+  verifyAccessToken(token: string) {
+    try {
+      return this.JwtService.verify(token, {
+        secret: this.config.get('JWT_SECRET_KEY'),
+      });
+    } catch {
+      throw new ForbiddenException();
     }
   }
 }

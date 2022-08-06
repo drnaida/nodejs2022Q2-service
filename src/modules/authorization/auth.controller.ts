@@ -25,7 +25,7 @@ export class AuthController {
   @Public()
   @Post('signup')
   async signup(@Body() signup: CreateUserDto) {
-    const user = this.authorizationService.signup(signup);
+    return this.authorizationService.signup(signup);
   }
 
   @Public()

@@ -1,21 +1,35 @@
-import { AuthGuard } from '@nestjs/passport';
-import { Reflector } from '@nestjs/core';
-import {ExecutionContext, Injectable} from '@nestjs/common';
-
+import {AuthService} from "../../modules/authorization/auth.service";
+import {Injectable} from "@nestjs/common";
+import {UnauthorizedException} from "@nestjs/common";
+import {CanActivate} from "@nestjs/common";
+import {ExecutionContext} from "@nestjs/common";
+import {Observable} from "rxjs";
 @Injectable()
-export class AtGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
-    super();
-  }
+export class AtGuard implements CanActivate {
+  constructor(private readonly authService: AuthService) {}
 
-  canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.getAllAndOverride('isPublic', [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const authHeader = request.headers.authorization;
 
-    if (isPublic) return true;
+    if (authHeader) {
+      const [bearer, accessToken] = authHeader.split(' ');
+      console.log(authHeader);
+      if (bearer !== 'Bearer' || !accessToken) {
+        throw new UnauthorizedException();
+      }
 
-    return super.canActivate(context);
+      request.user = this.authService.verifyAccessToken(accessToken);
+
+      // =====
+      console.log('Проверь доходит ли віполнение до сюда');
+      // =====
+
+      return true;
+    }
+
+    throw new UnauthorizedException();
   }
 }
