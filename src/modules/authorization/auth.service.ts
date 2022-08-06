@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {ForbiddenException, HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { InMemoryDatabaseService } from '../../utils/in-memory-database.service';
 import { FavoritesService } from '../favorites/favorites.service';
@@ -81,7 +81,21 @@ export class AuthService {
   }
 
   async login(dto: AuthDto) {
-    return 'fgdgfd';
+    const user = await this.prisma.user.findFirst({
+      where: {
+        login: dto.login,
+      },
+    });
+
+    if (!user) throw new ForbiddenException('Access Denied');
+
+    const passwordMatches = await bcrypt.compare(dto.password, user.password);
+    if (!passwordMatches)
+      throw new ForbiddenException('Access Denied');
+
+    const tokens = await this.getTokens(user.id, user.login);
+    await this.updateRtHash(user.id, tokens.refresh_token);
+    return tokens;
   }
 
   async refresh(dto: AuthDto) {
