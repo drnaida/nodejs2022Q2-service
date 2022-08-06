@@ -4,13 +4,19 @@ import { AuthController } from './auth.controller';
 import { DataBaseModule } from '../../utils/in-memory-database.module';
 import { FavoritesModule } from '../favorites/favorites.module';
 import { TracksModule } from '../tracks/tracks.module';
-import {AtStrategy} from "./strategies/at.strategy";
-import {RtStrategy} from "./strategies/rt.strategy";
+import { AtStrategy } from './strategies/at.strategy';
+import { RtStrategy } from './strategies/rt.strategy';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   providers: [AuthService, AtStrategy, RtStrategy],
   controllers: [AuthController],
-  imports: [DataBaseModule, forwardRef(() => FavoritesModule), TracksModule],
+  imports: [
+    DataBaseModule,
+    forwardRef(() => FavoritesModule),
+    TracksModule,
+    JwtModule.register({}),
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}
