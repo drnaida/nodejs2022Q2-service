@@ -11,6 +11,7 @@ import {PrismaModule} from "./modules/prisma/prisma.module";
 import {AuthModule} from "./modules/authorization/auth.module";
 import {APP_GUARD} from "@nestjs/core";
 import {AtGuard} from "./utils/guards";
+import {ConfigModule} from "@nestjs/config";
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import {AtGuard} from "./utils/guards";
     FavoritesModule,
     PrismaModule,
     AuthModule,
+      ConfigModule.forRoot({isGlobal: true})
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: AtGuard }],

@@ -11,39 +11,30 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
+import {JwtPayload} from "./types";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly JwtService: JwtService,
     private readonly prisma: PrismaService,
-    private readonly config: ConfigService,
+    private config: ConfigService,
   ) {}
   hashData(data: string) {
     return bcrypt.hash(data, 10);
   }
-  async getTokens(userId: string, email: string) {
+  async getTokens(userId: string, login: string) {
+    const jwtPayload: JwtPayload = { userId, login };
+
     const [at, rt] = await Promise.all([
-      this.JwtService.signAsync(
-        {
-          sub: userId,
-          email,
-        },
-        {
-          secret: 'at-secret',
-          expiresIn: 60 * 15,
-        },
-      ),
-      this.JwtService.signAsync(
-        {
-          sub: userId,
-          email,
-        },
-        {
-          secret: 'rt-secret',
-          expiresIn: 60 * 60 * 24 * 7,
-        },
-      ),
+      this.JwtService.signAsync(jwtPayload, {
+        secret: this.config.get<string>('JWT_SECRET_KEY'),
+        expiresIn: this.config.get<string>('TOKEN_EXPIRE_TIME'),
+      }),
+      this.JwtService.signAsync(jwtPayload, {
+        secret: this.config.get<string>('JWT_SECRET_REFRESH_KEY'),
+        expiresIn: this.config.get<string>('TOKEN_REFRESH_EXPIRE_TIME'),
+      }),
     ]);
 
     return {
@@ -119,14 +110,15 @@ export class AuthService {
       const request = await this.JwtService.verifyAsync(rt, {
         secret: this.config.get<string>('JWT_SECRET_REFRESH_KEY'),
       });
-
+      console.log(request);
       const userId = request['userId'];
       return this.refreshTokens(userId, rt);
     } catch (error) {
       if (error.message === 'invalid signature') {
         throw new ForbiddenException(error.message);
       }
-      throw new UnauthorizedException(error.message);
+      console.log(error);
+      throw new UnauthorizedException('ba');
     }
   }
 }
