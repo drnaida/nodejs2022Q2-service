@@ -27,6 +27,6 @@ import {ConfigModule} from "@nestjs/config";
       ConfigModule.forRoot({isGlobal: true})
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: APP_GUARD, useClass: AtGuard }],
 })
 export class AppModule {}
