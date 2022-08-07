@@ -10,7 +10,7 @@ export const prepareStringForLog = (
 ) => {
   const { method, url }: { method: string; url: string } = request;
 
-  return `Response Code: ${
+  return `Status: ${
     errorResponse.statusCode
   } - Method: ${method} - URL: ${url}\n
     ${
@@ -30,14 +30,14 @@ export const writeLog = (errorLog: string) => {
         { recursive: true },
         (err: NodeJS.ErrnoException) => {
           if (err) throw err;
-        },
-      );
-      fs.appendFile(
-        fullPath,
-        errorLog,
-        'utf8',
-        (err: NodeJS.ErrnoException) => {
-          if (err) throw err;
+          fs.appendFile(
+            fullPath,
+            errorLog,
+            'utf8',
+            (err: NodeJS.ErrnoException) => {
+              if (err) throw err;
+            },
+          );
         },
       );
     }
