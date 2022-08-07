@@ -2,39 +2,39 @@ import { LoggerService } from '@nestjs/common';
 import {writeLog} from "../loggerRequest";
 
 export class ApplicationLogger implements LoggerService {
-  private _arg;
+  private logs;
 
   constructor(arg: string[]) {
-    this._arg = arg;
+    this.logs = arg;
   }
 
-  log(message: string, ...optionalParams: any[]) {
-    if (this._arg.includes('log')) {
-      console.log('\x1b[32m', message, optionalParams);
+  log(message: any, ...optionalParams: any[]) {
+    if (this.logs.includes('log')) {
+      console.log(message, optionalParams);
     }
   }
 
-  error(message: string, ...optionalParams: any[]): any {
-    if (this._arg.includes('error')) {
-      console.log('\x1b[31m', message, optionalParams);
+  error(message: any, ...optionalParams: any[]): any {
+    if (this.logs.includes('error')) {
+      console.log(message, optionalParams);
     }
   }
 
-  warn(message: string, ...optionalParams: any[]): any {
-    if (this._arg.includes('warn')) {
-      console.log('\x1b[33m', message, optionalParams);
+  warn(message: any, ...optionalParams: any[]): any {
+    if (this.logs.includes('warn')) {
+      console.log(message, optionalParams);
     }
   }
 
-  debug(message: string, ...optionalParams: any[]) {
-    if (this._arg.includes('debug')) {
-      console.log('\x1b[36m', message, optionalParams);
+  debug?(message: any, ...optionalParams: any[]) {
+    if (this.logs.includes('debug')) {
+      console.log(message, optionalParams);
     }
   }
 
-  verbose(message: string, ...optionalParams: any[]) {
-    if (this._arg.includes('verbose')) {
-      console.log('\x1b[35m', message, optionalParams);
+  verbose?(message: any, ...optionalParams: any[]) {
+    if (this.logs.includes('verbose')) {
+      console.log(message, optionalParams);
     }
   }
 }

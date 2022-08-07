@@ -9,7 +9,7 @@ export class LoggerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     console.log('New log: ');
     const requestInfo = {
-      url: req.url,
+      url: req.baseUrl,
       query_parameters: req.query,
       body: req.body,
       statusCode: res.statusCode,
