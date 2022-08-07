@@ -1,4 +1,5 @@
 import { LoggerService } from '@nestjs/common';
+import {writeLog} from "../loggerRequest";
 
 export class ApplicationLogger implements LoggerService {
   private _arg;

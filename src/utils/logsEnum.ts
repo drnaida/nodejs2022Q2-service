@@ -3,9 +3,8 @@ import { HttpStatus } from '@nestjs/common';
 export type ErrorResponse = {
     statusCode: HttpStatus;
     error: string;
-    path: string;
+    url: string;
     method: string;
-    timeStamp: Date;
 };
 
 export enum Logs {

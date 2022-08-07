@@ -1,65 +1,45 @@
 import {
-    Catch,
-    ArgumentsHost,
-    ExceptionFilter,
-    HttpException,
-    HttpStatus,
-    Logger,
+  Catch,
+  ArgumentsHost,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  Logger,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { HttpArgumentsHost } from '@nestjs/common/interfaces';
-import {prepareStringForLog, writeLog} from "./loggerRequest";
-import {ErrorResponse} from "./logsEnum";
+import { prepareStringForLog, writeLog } from './loggerRequest';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-    private readonly logger: Logger = new Logger(AllExceptionsFilter.name);
+  private readonly logger: Logger = new Logger(AllExceptionsFilter.name);
 
-    catch(exception: unknown, host: ArgumentsHost) {
-        const ctx: HttpArgumentsHost = host.switchToHttp();
-        const response = ctx.getResponse<Response>();
-        const request = ctx.getRequest<Request>();
-        let status: HttpStatus;
-        let errorMessage: string;
+  catch(exception: unknown, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const request = ctx.getRequest();
 
-        if (exception instanceof HttpException) {
-            status = exception.getStatus();
-            const errorResponse: any = exception.getResponse();
-            errorMessage = errorResponse.error || exception.message;
-        } else {
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-            errorMessage = 'Internal server error';
-        }
+    const status =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
+    const errorMessage =
+      exception instanceof HttpException ? exception.message : 'Internal error';
 
-        const errorResponse = this.getErrorResponse(status, errorMessage, request);
-        const errorLog = this.getErrorLog(errorResponse, request, exception);
-        this.logger.error(errorLog);
-        console.log('Yeeeeeeeeeees', errorLog);
-        this.writeErrorLogToFile(errorLog);
-        response.status(status).json(errorResponse);
-    }
-
-    private getErrorResponse = (
-        status: HttpStatus,
-        errorMessage: string,
-        request: Request,
-    ) => ({
+    const errorLog = prepareStringForLog(
+      {
         statusCode: status,
         error: errorMessage,
-        path: request.url,
+        url: request.url,
         method: request.method,
-        timeStamp: new Date(),
+      },
+      request,
+      exception,
+    );
+    this.logger.error(errorLog);
+    writeLog(errorLog);
+    ctx.getResponse().status(status).json({
+      statusCode: status,
+      error: errorMessage,
+      url: request.url,
+      method: request.method,
     });
-
-    private getErrorLog = (
-        errorResponse: ErrorResponse,
-        request: Request,
-        exception: unknown,
-    ): string => {
-        return prepareStringForLog(errorResponse, request, exception);
-    };
-
-    private writeErrorLogToFile = (errorLog: string): void => {
-        writeLog(errorLog);
-    };
+  }
 }
