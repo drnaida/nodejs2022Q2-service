@@ -4,18 +4,18 @@ import { ErrorResponse, Logs } from './logsEnum';
 import e from 'express';
 
 export const prepareStringForLog = (
-  errorResponse: ErrorResponse,
-  request: e.Request,
-  exception: unknown,
+    errorResponse: ErrorResponse,
+    request: e.Request,
+    exception: unknown,
 ) => {
   const { method, url }: { method: string; url: string } = request;
 
-  return `Status: ${
-    errorResponse.statusCode
+  return `Response Code: ${
+      errorResponse.statusCode
   } - Method: ${method} - URL: ${url}\n
     ${
       exception instanceof HttpException ? exception.stack : errorResponse.error
-    }\n`;
+  }\n`;
 };
 
 export const writeLog = (errorLog: string) => {
@@ -26,12 +26,11 @@ export const writeLog = (errorLog: string) => {
       const logFileName: number = new Date().valueOf();
       const fullPath = `${logsFolder}/${logFileName}.log`;
       fs.mkdir(
-        logsFolder,
-        { recursive: true },
-        (err: NodeJS.ErrnoException) => {
-          if (err) throw err;
-
-        },
+          logsFolder,
+          { recursive: true },
+          (err: NodeJS.ErrnoException) => {
+            if (err) throw err;
+          },
       );
       fs.appendFile(
           fullPath,
@@ -48,23 +47,23 @@ export const writeLog = (errorLog: string) => {
 
       if (fileSize < logFileSize) {
         fs.appendFile(
-          `${logsFolder}/${file}`,
-          errorLog,
-          'utf8',
-          (err: NodeJS.ErrnoException) => {
-            if (err) throw err;
-          },
+            `${logsFolder}/${file}`,
+            errorLog,
+            'utf8',
+            (err: NodeJS.ErrnoException) => {
+              if (err) throw err;
+            },
         );
       } else {
         const logFileName: number = new Date().valueOf();
         const fullPath = `${logsFolder}/${logFileName}.log`;
         fs.appendFile(
-          fullPath,
-          errorLog,
-          'utf8',
-          (err: NodeJS.ErrnoException) => {
-            if (err) throw err;
-          },
+            fullPath,
+            errorLog,
+            'utf8',
+            (err: NodeJS.ErrnoException) => {
+              if (err) throw err;
+            },
         );
       }
     });
@@ -84,11 +83,11 @@ export const prepareLoggerVariables = (): string[] => {
 
 export const addException = (): void => {
   process
-    .on('unhandledRejection', () => {
-      process.stdout.write('Unhandled Rejection at Promise');
-    })
-    .on('uncaughtException', () => {
-      process.stdout.write('Uncaught Exception thrown');
-      process.exit(1);
-    });
+      .on('unhandledRejection', () => {
+        process.stdout.write('Unhandled Rejection at Promise');
+      })
+      .on('uncaughtException', () => {
+        process.stdout.write('Uncaught Exception thrown');
+        process.exit(1);
+      });
 };
