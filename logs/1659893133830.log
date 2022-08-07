@@ -1,0 +1,16 @@
+Status: 400 - Method: PUT - URL: /artist/some-invalid-id
+
+    HttpException: It is not a uuid version 4
+    at ArtistsController.update (/usr/src/app/src/modules/artists/artists.controller.ts:102:13)
+    at /usr/src/app/node_modules/@nestjs/core/router/router-execution-context.js:38:29
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at /usr/src/app/node_modules/@nestjs/core/router/router-execution-context.js:46:28
+    at /usr/src/app/node_modules/@nestjs/core/router/router-proxy.js:9:17
+Status: 400 - Method: PUT - URL: /artist/some-invalid-id
+
+    HttpException: It is not a uuid version 4
+    at ArtistsController.update (/usr/src/app/src/modules/artists/artists.controller.ts:102:13)
+    at /usr/src/app/node_modules/@nestjs/core/router/router-execution-context.js:38:29
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at /usr/src/app/node_modules/@nestjs/core/router/router-execution-context.js:46:28
+    at /usr/src/app/node_modules/@nestjs/core/router/router-proxy.js:9:17

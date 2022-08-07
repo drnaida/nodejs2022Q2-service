@@ -1,0 +1,36 @@
+Status: 404 - Method: PUT - URL: /track/0a35dd62-e09f-444b-a628-f4e7c6954f57
+
+    HttpException: Album not found
+    at TracksService.update (/usr/src/app/src/modules/tracks/tracks.service.ts:47:13)
+    at /usr/src/app/node_modules/@nestjs/core/router/router-execution-context.js:46:28
+    at /usr/src/app/node_modules/@nestjs/core/router/router-proxy.js:9:17
+Status: 404 - Method: PUT - URL: /track/0a35dd62-e09f-444b-a628-f4e7c6954f57
+
+    HttpException: Album not found
+    at TracksService.update (/usr/src/app/src/modules/tracks/tracks.service.ts:47:13)
+    at /usr/src/app/node_modules/@nestjs/core/router/router-execution-context.js:46:28
+    at /usr/src/app/node_modules/@nestjs/core/router/router-proxy.js:9:17
+Status: 404 - Method: PUT - URL: /track/0a35dd62-e09f-444b-a628-f4e7c6954f57
+
+    HttpException: Album not found
+    at TracksService.update (/usr/src/app/src/modules/tracks/tracks.service.ts:47:13)
+    at /usr/src/app/node_modules/@nestjs/core/router/router-execution-context.js:46:28
+    at /usr/src/app/node_modules/@nestjs/core/router/router-proxy.js:9:17
+Status: 404 - Method: PUT - URL: /track/0a35dd62-e09f-444b-a628-f4e7c6954f57
+
+    HttpException: Album not found
+    at TracksService.update (/usr/src/app/src/modules/tracks/tracks.service.ts:47:13)
+    at /usr/src/app/node_modules/@nestjs/core/router/router-execution-context.js:46:28
+    at /usr/src/app/node_modules/@nestjs/core/router/router-proxy.js:9:17
+Status: 404 - Method: PUT - URL: /track/0a35dd62-e09f-444b-a628-f4e7c6954f57
+
+    HttpException: Album not found
+    at TracksService.update (/usr/src/app/src/modules/tracks/tracks.service.ts:47:13)
+    at /usr/src/app/node_modules/@nestjs/core/router/router-execution-context.js:46:28
+    at /usr/src/app/node_modules/@nestjs/core/router/router-proxy.js:9:17
+Status: 404 - Method: PUT - URL: /track/0a35dd62-e09f-444b-a628-f4e7c6954f57
+
+    HttpException: Album not found
+    at TracksService.update (/usr/src/app/src/modules/tracks/tracks.service.ts:47:13)
+    at /usr/src/app/node_modules/@nestjs/core/router/router-execution-context.js:46:28
+    at /usr/src/app/node_modules/@nestjs/core/router/router-proxy.js:9:17

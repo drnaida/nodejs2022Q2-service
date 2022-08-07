@@ -30,15 +30,16 @@ export const writeLog = (errorLog: string) => {
         { recursive: true },
         (err: NodeJS.ErrnoException) => {
           if (err) throw err;
-          fs.appendFile(
-            fullPath,
-            errorLog,
-            'utf8',
-            (err: NodeJS.ErrnoException) => {
-              if (err) throw err;
-            },
-          );
+
         },
+      );
+      fs.appendFile(
+          fullPath,
+          errorLog,
+          'utf8',
+          (err: NodeJS.ErrnoException) => {
+            if (err) throw err;
+          },
       );
     }
     (files || []).forEach((file: string) => {
