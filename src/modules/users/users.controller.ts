@@ -8,7 +8,7 @@ import {
   Put,
   HttpCode,
   HttpStatus,
-  HttpException,
+  HttpException, Logger,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
@@ -17,6 +17,7 @@ import { checkThatThisIsUUID4 } from '../../utils/checkUUID';
 
 @Controller('user')
 export class UsersController {
+  private readonly logger: Logger = new Logger(UsersController.name);
   constructor(private readonly usersService: UsersService) {}
   @Get()
   getAll() {
@@ -29,17 +30,20 @@ export class UsersController {
       if (checkThatThisIsUUID4(id)) {
         const user = await this.usersService.getById(id);
         if (!user) {
+          this.logger.warn('Not found');
           throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         } else {
           return user;
         }
       } else {
+        this.logger.warn('Not uuid');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
+      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
@@ -58,12 +62,14 @@ export class UsersController {
         const artist = this.usersService.getById(id);
         return this.usersService.remove(id);
       } else {
+        this.logger.warn('Not uuid');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
+      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
@@ -76,12 +82,14 @@ export class UsersController {
         const artist = this.usersService.getById(id);
         return this.usersService.update(id, updateProduct);
       } else {
+        this.logger.warn('Not uuid');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
+      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }

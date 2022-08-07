@@ -46,6 +46,7 @@ export class AlbumsController {
         );
       }
     } catch (err) {
+      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
@@ -72,6 +73,7 @@ export class AlbumsController {
         );
       }
     } catch (err) {
+      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
@@ -91,6 +93,7 @@ export class AlbumsController {
         );
       }
     } catch (err) {
+      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
