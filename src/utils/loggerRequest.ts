@@ -19,8 +19,8 @@ export const prepareStringForLog = (
 };
 
 export const writeLog = (errorLog: string): void => {
-    const logsFolder: string = process.env.LOGS_FOLDER;
-    const logFileSize = Number(process.env.LOG_FILE_SIZE);
+    const logsFolder: string = process.env.LOGGER_FOLDER;
+    const logFileSize = Number(process.env.LOGGER_FILE_SIZE);
 
     fs.readdir(logsFolder, (err: NodeJS.ErrnoException, files: string[]) => {
         if (err) {
@@ -69,7 +69,7 @@ export const checkLogFileSize = (fileName: string): number => {
 
 export const prepareLoggerVariables = (): string[] => {
     const logVariables = [];
-    const logs = Array(Number(process.env.NEST_LOGER_LEVEL)).fill('_');
+    const logs = Array(Number(process.env.LOGGER_LEVEL)).fill('_');
 
     logs.forEach((_, index: number): void => {
         logVariables.push(Logs[index]);
