@@ -12,17 +12,17 @@ export const prepareStringForLog = (
 
     return `Response Code: ${
         errorResponse.statusCode
-    } - Method: ${method} - URL: ${url} - TimeStamp: ${errorResponse.timeStamp}\n
+    } - Method: ${method} - URL: ${url}\n
     ${
         exception instanceof HttpException ? exception.stack : errorResponse.error
     }\n`;
 };
 
-export const writeLog = (errorLog: string): void => {
+export const writeLog = (errorLog: string) => {
     const logsFolder: string = process.env.LOGGER_FOLDER;
     const logFileSize = Number(process.env.LOGGER_FILE_SIZE);
-
     fs.readdir(logsFolder, (err: NodeJS.ErrnoException, files: string[]) => {
+        console.log(files);
         if (err) {
             const fullPath: string = createNewLogsPath(logsFolder);
             createFolder(logsFolder);
@@ -47,6 +47,7 @@ export const createNewLogsPath = (logsFolder: string): string => {
 };
 
 export const writeLogInFile = (logName: string, errorLog: string) => {
+    console.log('sdfdsfdsfdsfdss');
     fs.appendFile(logName, errorLog, 'utf8', (err: NodeJS.ErrnoException) => {
         if (err) throw err;
     });

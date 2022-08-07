@@ -34,6 +34,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         const errorResponse = this.getErrorResponse(status, errorMessage, request);
         const errorLog = this.getErrorLog(errorResponse, request, exception);
         this.logger.error(errorLog);
+        console.log('Yeeeeeeeeeees', errorLog);
         this.writeErrorLogToFile(errorLog);
         response.status(status).json(errorResponse);
     }

@@ -7,7 +7,7 @@ import { parse } from 'yaml';
 import 'dotenv/config';
 import { readFile } from 'fs/promises';
 import {ApplicationLogger} from "./utils/logger/logger.service";
-import {prepareLoggerVariables} from "./utils/loggerRequest";
+import {addException, prepareLoggerVariables} from "./utils/loggerRequest";
 
 async function bootstrap() {
   console.log(AppModule);
@@ -25,7 +25,7 @@ async function bootstrap() {
     'utf-8',
   );
   const parse_yaml = parse(docs);
-
+  addException();
   SwaggerModule.setup('doc', app, parse_yaml);
   await app.listen(process.env.PORT || 4000);
 }
