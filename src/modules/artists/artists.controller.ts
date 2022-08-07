@@ -8,7 +8,7 @@ import {
   Put,
   HttpCode,
   HttpStatus,
-  HttpException, Logger,
+  HttpException,
 } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-product.dto';
@@ -17,7 +17,6 @@ import { checkThatThisIsUUID4 } from '../../utils/checkUUID';
 
 @Controller('artist')
 export class ArtistsController {
-  private readonly logger: Logger = new Logger(ArtistsController.name);
   constructor(private readonly artistsService: ArtistsService) {}
   @Get()
   getAll() {
@@ -33,18 +32,15 @@ export class ArtistsController {
           console.log('aaaaaaa', artist);
           return artist;
         } else {
-          this.logger.warn('Not found');
           throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
         }
       } else {
-        this.logger.warn('Not uuid');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
-      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
@@ -55,7 +51,6 @@ export class ArtistsController {
     try {
       return this.artistsService.create(createArtist);
     } catch (err) {
-      this.logger.warn('Required field is empty');
       throw new HttpException(
         'Required filled must NOT be empty',
         HttpStatus.BAD_REQUEST,
@@ -71,14 +66,12 @@ export class ArtistsController {
         const artist = this.artistsService.getById(id);
         return this.artistsService.remove(id);
       } else {
-        this.logger.warn('Not uuid');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
-      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
@@ -91,14 +84,12 @@ export class ArtistsController {
         const artist = this.artistsService.getById(id);
         return this.artistsService.update(id, updateProduct);
       } else {
-        this.logger.warn('Not uuid');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
-      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }

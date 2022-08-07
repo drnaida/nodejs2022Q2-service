@@ -6,7 +6,7 @@ import {
   Post,
   HttpCode,
   HttpStatus,
-  HttpException, Logger,
+  HttpException,
 } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { checkThatThisIsUUID4 } from '../../utils/checkUUID';
@@ -16,7 +16,6 @@ import { TracksService } from '../tracks/tracks.service';
 
 @Controller('favs')
 export class FavoritesController {
-  private readonly logger: Logger = new Logger(FavoritesController.name);
   constructor(
     private readonly favoritesService: FavoritesService,
     private readonly artistsService: ArtistsService,
@@ -35,7 +34,6 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         const artist = await this.artistsService.getById(id);
         if (!artist) {
-          this.logger.warn('Not found');
           throw new HttpException(
             'Artist not found, so it cannot be added to favorites',
             HttpStatus.UNPROCESSABLE_ENTITY,
@@ -44,14 +42,12 @@ export class FavoritesController {
           return await this.favoritesService.createArtist(id);
         }
       } else {
-        this.logger.warn('Not uuid');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
-      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
@@ -63,14 +59,12 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         return this.favoritesService.removeArtist(id);
       } else {
-        this.logger.warn('Not uuid');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
-      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
@@ -82,7 +76,6 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         const track = await this.tracksService.getById(id);
         if (!track) {
-          this.logger.warn('Not found');
           throw new HttpException(
               'Artist not found, so it cannot be added to favorites',
               HttpStatus.UNPROCESSABLE_ENTITY,
@@ -91,14 +84,12 @@ export class FavoritesController {
           return await this.favoritesService.createTrack(id);
         }
       } else {
-        this.logger.warn('Not uuid');
         throw new HttpException(
             'It is not a uuid version 4',
             HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
-      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
@@ -110,7 +101,6 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         return this.favoritesService.removeTrack(id);
       } else {
-        this.logger.warn('Not uuid');
         throw new HttpException(
             'It is not a uuid version 4',
             HttpStatus.BAD_REQUEST,
@@ -128,7 +118,6 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         const album = await this.albumsService.getById(id);
         if (!album) {
-          this.logger.warn('Not found');
           throw new HttpException(
               'Artist not found, so it cannot be added to favorites',
               HttpStatus.UNPROCESSABLE_ENTITY,
@@ -137,14 +126,12 @@ export class FavoritesController {
           return await this.favoritesService.createAlbum(id);
         }
       } else {
-        this.logger.warn('Not uuid');
         throw new HttpException(
             'It is not a uuid version 4',
             HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
-      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }
@@ -156,14 +143,12 @@ export class FavoritesController {
       if (checkThatThisIsUUID4(id)) {
         return this.favoritesService.removeAlbum(id);
       } else {
-        this.logger.warn('Not uuid');
         throw new HttpException(
             'It is not a uuid version 4',
             HttpStatus.BAD_REQUEST,
         );
       }
     } catch (err) {
-      this.logger.warn('Internal error');
       throw new HttpException(err.message, err.status);
     }
   }

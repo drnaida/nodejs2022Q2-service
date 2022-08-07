@@ -9,7 +9,7 @@ import {
   HttpCode,
   HttpStatus,
   HttpException, Req,
-  UseGuards
+    UseGuards
 } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
