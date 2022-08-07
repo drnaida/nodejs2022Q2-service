@@ -7,14 +7,14 @@ import { TracksModule } from './modules/tracks/tracks.module';
 import { AlbumsModule } from './modules/albums/albums.module';
 import { UsersModule } from './modules/users/users.module';
 import { FavoritesModule } from './modules/favorites/favorites.module';
-import {PrismaModule} from "./modules/prisma/prisma.module";
-import {AuthModule} from "./modules/authorization/auth.module";
-import {APP_GUARD} from "@nestjs/core";
-import {AtGuard} from "./utils/guards";
-import {ConfigModule} from "@nestjs/config";
-import {LoggerMiddleware} from "./modules/logger/logger.middleware";
-import {APP_FILTER} from "@nestjs/core";
-import {AllExceptionsFilter} from "./utils/filter";
+import { PrismaModule } from './modules/prisma/prisma.module';
+import { AuthModule } from './modules/authorization/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AtGuard } from './utils/guards';
+import { ConfigModule } from '@nestjs/config';
+import { LoggerMiddleware } from './utils/logger/logger.middleware';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './utils/filter';
 
 @Module({
   imports: [
@@ -27,14 +27,17 @@ import {AllExceptionsFilter} from "./utils/filter";
     FavoritesModule,
     PrismaModule,
     AuthModule,
-      ConfigModule.forRoot({isGlobal: true}),
-      LoggerModule
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
-  providers: [AppService, { provide: APP_GUARD, useClass: AtGuard }, {
-    provide: APP_FILTER,
-    useClass: AllExceptionsFilter,
-  },],
+  providers: [
+    AppService,
+    { provide: APP_GUARD, useClass: AtGuard },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {
