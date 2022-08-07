@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArtistsModule } from './modules/artists/artists.module';
@@ -12,7 +12,9 @@ import {AuthModule} from "./modules/authorization/auth.module";
 import {APP_GUARD} from "@nestjs/core";
 import {AtGuard} from "./utils/guards";
 import {ConfigModule} from "@nestjs/config";
-import {LoggerModule} from "./modules/logger/logger.module";
+import {LoggerMiddleware} from "./modules/logger/logger.middleware";
+import {APP_FILTER} from "@nestjs/core";
+import {AllExceptionsFilter} from "./utils/filter";
 
 @Module({
   imports: [
@@ -29,6 +31,13 @@ import {LoggerModule} from "./modules/logger/logger.module";
       LoggerModule
   ],
   controllers: [AppController],
-  providers: [AppService, { provide: APP_GUARD, useClass: AtGuard }],
+  providers: [AppService, { provide: APP_GUARD, useClass: AtGuard }, {
+    provide: APP_FILTER,
+    useClass: AllExceptionsFilter,
+  },],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

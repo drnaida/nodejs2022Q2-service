@@ -6,11 +6,12 @@ import { dirname, join } from 'path';
 import { parse } from 'yaml';
 import 'dotenv/config';
 import { readFile } from 'fs/promises';
-import {MyLogger} from "./modules/logger/logger.service";
+import {ApplicationLogger} from "./modules/logger/logger.service";
+import {prepareLoggerVariables} from "./utils/loggerRequest";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: new MyLogger(),
+    logger: new ApplicationLogger(prepareLoggerVariables()),
   });
   app.useGlobalPipes(
     new ValidationPipe({
