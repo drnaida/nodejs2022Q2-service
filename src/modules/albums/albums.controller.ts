@@ -15,9 +15,11 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { AlbumsService } from './albums.service';
 import { checkThatThisIsUUID4 } from '../../utils/checkUUID';
 import {PrismaService} from "../prisma/prisma.service";
+import {Logger} from "@nestjs/common";
 
 @Controller('album')
 export class AlbumsController {
+  private readonly logger: Logger = new Logger(AlbumsController.name);
   constructor(private readonly albumsService: AlbumsService,
               private readonly prismaService: PrismaService) {}
   @Get()
@@ -31,11 +33,13 @@ export class AlbumsController {
       if (checkThatThisIsUUID4(id)) {
         const album = await this.albumsService.getById(id);
         if (!album) {
+          this.logger.warn('Not found');
           throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
         } else {
           return album;
         }
       } else {
+        this.logger.warn('Bad request');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
@@ -61,6 +65,7 @@ export class AlbumsController {
         const artist = this.albumsService.getById(id);
         return this.albumsService.remove(id);
       } else {
+        this.logger.warn('Not uuid');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
@@ -79,6 +84,7 @@ export class AlbumsController {
         const artist = this.albumsService.getById(id);
         return this.albumsService.update(id, updateProduct);
       } else {
+        this.logger.warn('Not uuid');
         throw new HttpException(
           'It is not a uuid version 4',
           HttpStatus.BAD_REQUEST,
