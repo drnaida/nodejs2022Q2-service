@@ -34,7 +34,7 @@ export class UsersService {
     });
   }
 
-  async create(artistDto: CreateUserDto): Promise<any> {
+  async create(artistDto): Promise<any> {
     try {
       const time = Date.now();
       artistDto.createdAt = time;

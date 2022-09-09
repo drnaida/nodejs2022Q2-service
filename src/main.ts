@@ -6,9 +6,14 @@ import { dirname, join } from 'path';
 import { parse } from 'yaml';
 import 'dotenv/config';
 import { readFile } from 'fs/promises';
+import {ApplicationLogger} from "./utils/logger/logger.service";
+import {addException, prepareLoggerVariables} from "./utils/loggerRequest";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  console.log(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new ApplicationLogger(prepareLoggerVariables()),
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -20,7 +25,7 @@ async function bootstrap() {
     'utf-8',
   );
   const parse_yaml = parse(docs);
-
+  addException();
   SwaggerModule.setup('doc', app, parse_yaml);
   await app.listen(process.env.PORT || 4000);
 }

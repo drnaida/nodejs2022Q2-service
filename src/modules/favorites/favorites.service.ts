@@ -1,72 +1,133 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InMemoryDatabaseService } from '../../utils/in-memory-database.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { Track } from '../tracks/track.entity';
+import { CreateTrackDto } from '../tracks/dto/create-track.dto';
+import { UpdateTrackDto } from '../tracks/dto/update-track.dto';
 @Injectable()
 export class FavoritesService {
-  constructor(private readonly databaseService: InMemoryDatabaseService) {}
+  constructor(
+    private readonly databaseService: InMemoryDatabaseService,
+    private readonly prismaService: PrismaService,
+  ) {}
 
-  getAll() {
-    const favorites = this.databaseService.getAll('favorites');
-    for (const element in favorites) {
-      if (element == 'artists') {
-        const result = favorites['artists'].map((item) => {
-          if (item != null) {
-            return this.databaseService.getById(item.id, 'artists');
-          }
-        });
-
-        const result1 = result.filter((item) => item !== null);
-        favorites.artists = result1;
-      } else if (element == 'albums') {
-        const result = favorites['albums'].map((item) => {
-          if (item != null) {
-            return this.databaseService.getById(item.id, 'albums');
-          }
-        });
-        const result1 = result.filter((item) => item !== null);
-        favorites.albums = result1;
-      } else if (element == 'tracks') {
-        const result = favorites['tracks'].map((item) => {
-          if (item != null) {
-            return this.databaseService.getById(item.id, 'tracks');
-          }
-        });
-        const result1 = result.filter((item) => item !== null);
-        favorites.tracks = result1;
+  async getAll(): Promise<any> {
+    const getAllArtists = await this.prismaService.artistsFavorites.findMany({
+      include: {
+        artist: {}
       }
+    });
+    const showArtistsInRightWay = getAllArtists.map((a) => {
+      return a.artist;
+    });
+    const getAllTracks = await this.prismaService.tracksFavorites.findMany({
+      include: {
+        track: {}
+      }
+    });
+    const showTracksInRightWay = getAllTracks.map((a) => {
+      return a.track;
+    });
+    const getAllAlbums = await this.prismaService.albumsFavorites.findMany({
+      include: {
+        album: {}
+      }
+    });
+    const showAlbumsInRightWay = getAllAlbums.map((a) => {
+      return a.album;
+    });
+
+    return {
+      artists: showArtistsInRightWay,
+      albums: showAlbumsInRightWay,
+      tracks: showTracksInRightWay,
+    };
+  }
+
+  async createArtist(id: string): Promise<any> {
+    try {
+      const artist = await this.prismaService.artist.findUnique({
+        where: { id },
+      });
+      if (artist) {
+        const createdArtist = await this.prismaService.artistsFavorites.create({
+          data: { artistId: id },
+        });
+        return createdArtist;
+      }
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
-    console.log('getAll', favorites);
-    return favorites;
   }
 
-  getById(id: string, subkey) {
-    let result;
-    if (subkey == 'artists') {
-      result = this.databaseService.getById(id, 'artists');
-    } else if (subkey == 'albums') {
-      result = this.databaseService.getById(id, 'albums');
-    } else if (subkey == 'tracks') {
-      result = this.databaseService.getById(id, 'tracks');
+  async createTrack(id: string): Promise<any> {
+    try {
+      const track = await this.prismaService.track.findUnique({
+        where: { id },
+      });
+      if (track) {
+        const createdTrack = await this.prismaService.tracksFavorites.create({
+          data: { trackId: id },
+        });
+        return createdTrack;
+      }
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
-    return result;
   }
 
-  create(id: string) {
-    return this.databaseService.create(id, 'favorites');
+  async createAlbum(id: string): Promise<any> {
+    try {
+      const album = await this.prismaService.album.findUnique({
+        where: { id },
+      });
+      if (album) {
+        const createdAlbum = await this.prismaService.albumsFavorites.create({
+          data: { albumId: id },
+        });
+        return createdAlbum;
+      }
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  createFavorite(id: string, subkey) {
-    this.databaseService.createFavorite(id, subkey);
-    const result = this.databaseService.getById(id, subkey);
-    console.log('createResult', result);
-    return result;
+  async removeArtist(id: string): Promise<any> {
+    try {
+      const deleted = await this.prismaService.artistsFavorites.delete({
+        where: {
+          artistId: id,
+        },
+      });
+      return deleted;
+    } catch (err) {
+      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+    }
   }
 
-  remove(id: string) {
-    return this.databaseService.remove(id, 'favorites');
+  async removeTrack(id: string): Promise<any> {
+    try {
+      const deleted = await this.prismaService.tracksFavorites.delete({
+        where: {
+          trackId: id,
+        },
+      });
+      return deleted;
+    } catch (err) {
+      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
+    }
   }
-  removeFavorite(id: string, subkey) {
-    const result = this.databaseService.removeFavorite(id, subkey);
-    console.log('deleted', result);
-    return result;
+
+  async removeAlbum(id: string): Promise<any> {
+    try {
+      const deleted = await this.prismaService.albumsFavorites.delete({
+        where: {
+          albumId: id,
+        },
+      });
+      return deleted;
+    } catch (err) {
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+    }
   }
 }

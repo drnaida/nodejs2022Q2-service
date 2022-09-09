@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArtistsModule } from './modules/artists/artists.module';
@@ -7,7 +7,14 @@ import { TracksModule } from './modules/tracks/tracks.module';
 import { AlbumsModule } from './modules/albums/albums.module';
 import { UsersModule } from './modules/users/users.module';
 import { FavoritesModule } from './modules/favorites/favorites.module';
-import {PrismaModule} from "./modules/prisma/prisma.module";
+import { PrismaModule } from './modules/prisma/prisma.module';
+import { AuthModule } from './modules/authorization/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AtGuard } from './utils/guards';
+import { ConfigModule } from '@nestjs/config';
+import { LoggerMiddleware } from './utils/logger/logger.middleware';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './utils/filter';
 
 @Module({
   imports: [
@@ -18,9 +25,22 @@ import {PrismaModule} from "./modules/prisma/prisma.module";
     DataBaseModule,
     UsersModule,
     FavoritesModule,
-    PrismaModule
+    PrismaModule,
+    AuthModule,
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    { provide: APP_GUARD, useClass: AtGuard },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
